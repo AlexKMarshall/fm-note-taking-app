@@ -15,7 +15,8 @@
     "typecheck": "npm run cf-typegen && react-router typegen && tsc -b",
     "format": "prettier --write .",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "test": "vitest"
   },
   "dependencies": {
     "drizzle-orm": "~0.36.3",
