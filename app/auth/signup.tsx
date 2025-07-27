@@ -7,8 +7,7 @@ export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData()
   const email = formData.get('email')
   const password = formData.get('password')
-  const confirmPassword = formData.get('confirm-password')
-  console.log({ email, password, confirmPassword })
+  console.log({ email, password })
 }
 
 export default function Signup() {
@@ -45,15 +44,6 @@ export default function Signup() {
           <p id="password-description" className="text-xs text-gray-600">
             At least 8 characters
           </p>
-        </div>
-        <div className="flex flex-col gap-2.5">
-          <Label htmlFor="confirm-password">Confirm Password</Label>
-          <Input
-            id="confirm-password"
-            name="confirm-password"
-            type="password"
-            autoComplete="new-password"
-          />
         </div>
         <button
           type="submit"
