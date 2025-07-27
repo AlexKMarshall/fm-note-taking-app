@@ -1,4 +1,15 @@
-import { Link } from 'react-router'
+import { Form, Link, type ActionFunctionArgs } from 'react-router'
+import { Input } from '~/components/input'
+import { Label } from '~/components/label'
+import type { Route } from './+types/signup'
+
+export async function action({ request }: Route.ActionArgs) {
+  const formData = await request.formData()
+  const email = formData.get('email')
+  const password = formData.get('password')
+  const confirmPassword = formData.get('confirm-password')
+  console.log({ email, password, confirmPassword })
+}
 
 export default function Signup() {
   return (
@@ -11,31 +22,38 @@ export default function Signup() {
           Sign up to start organizing your notes and boost your productivity.
         </p>
       </div>
-      <form className="flex flex-col gap-4">
+      <Form method="post" className="flex flex-col gap-4">
         <div className="flex flex-col gap-2.5">
-          <label htmlFor="email" className="text-sm text-gray-950">
-            Email Address
-          </label>
-          <input
+          <Label htmlFor="email">Email Address</Label>
+          <Input
             id="email"
+            name="email"
             type="email"
             placeholder="email@example.com"
-            className="rounded-lg border border-gray-300 px-4 py-3 hover:bg-gray-50 focus-visible:border-gray-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-500"
+            autoComplete="email"
           />
         </div>
         <div className="flex flex-col gap-2.5">
-          <label htmlFor="password" className="text-sm text-gray-950">
-            Password
-          </label>
-          <input
+          <Label htmlFor="password">Password</Label>
+          <Input
             id="password"
+            name="password"
             type="password"
             aria-describedby="password-description"
-            className="rounded-lg border border-gray-300 px-4 py-3 hover:bg-gray-50 focus-visible:border-gray-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-500"
+            autoComplete="new-password"
           />
           <p id="password-description" className="text-xs text-gray-600">
             At least 8 characters
           </p>
+        </div>
+        <div className="flex flex-col gap-2.5">
+          <Label htmlFor="confirm-password">Confirm Password</Label>
+          <Input
+            id="confirm-password"
+            name="confirm-password"
+            type="password"
+            autoComplete="new-password"
+          />
         </div>
         <button
           type="submit"
@@ -43,7 +61,7 @@ export default function Signup() {
         >
           Sign Up
         </button>
-      </form>
+      </Form>
       <div className="h-px w-full bg-gray-200" />
       <p className="text-center text-sm text-gray-600">
         Already have an account?{' '}
