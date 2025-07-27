@@ -1,16 +1,36 @@
 import { Form, Link } from 'react-router'
+import * as v from 'valibot'
 import type { Route } from './+types/signup'
 import { Input } from '~/components/input'
 import { Label } from '~/components/label'
 
+const SignupSchema = v.object({
+  email: v.pipe(v.string(), v.email()),
+  password: v.pipe(v.string(), v.minLength(8)),
+})
+
 export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData()
-  const email = formData.get('email')
-  const password = formData.get('password')
-  console.log({ email, password })
+  const payload = Object.fromEntries(formData)
+
+  const result = v.safeParse(SignupSchema, payload)
+
+  if (!result.success) {
+    return {
+      payload,
+      issues: result.issues,
+    }
+  }
+
+  console.log('successfully validated payload', result.output)
+  return {
+    result: 'success',
+    payload: result.output,
+  }
 }
 
-export default function Signup() {
+export default function Signup({ actionData }: Route.ComponentProps) {
+  console.log({ actionData })
   return (
     <>
       <div className="flex flex-col items-center gap-2 text-center">
