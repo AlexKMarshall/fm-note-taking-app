@@ -1,7 +1,7 @@
 import { Form, Link } from 'react-router'
+import type { Route } from './+types/signup'
 import { Input } from '~/components/input'
 import { Label } from '~/components/label'
-import type { Route } from './+types/signup'
 
 export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData()
