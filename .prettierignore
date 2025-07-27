@@ -1,2 +1,5 @@
 .react-router/
 .wrangler/
+pnpm-lock.yaml
+vitest.shims.d.ts
+worker-configuration.d.ts
