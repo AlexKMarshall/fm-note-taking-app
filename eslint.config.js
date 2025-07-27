@@ -3,6 +3,7 @@ import typescriptParser from '@typescript-eslint/parser'
 import react from 'eslint-plugin-react'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
+import importPlugin from 'eslint-plugin-import'
 
 export default [
   // TypeScript files
@@ -23,6 +24,7 @@ export default [
       react,
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
+      import: importPlugin,
     },
     rules: {
       // Extend recommended configs
@@ -43,6 +45,9 @@ export default [
       'react/jsx-uses-react': 'off', // Not needed in React 17+
       'react/react-in-jsx-scope': 'off', // Not needed in React 17+
       'react-hooks/exhaustive-deps': 'error', // Missing deps should be errors
+
+      // Import sorting - minimal setup
+      'import/order': 'error',
     },
     settings: {
       react: {
