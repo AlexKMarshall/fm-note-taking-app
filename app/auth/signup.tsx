@@ -1,4 +1,4 @@
-import { Form, Link, type ActionFunctionArgs } from 'react-router'
+import { Form, Link } from 'react-router'
 import { Input } from '~/components/input'
 import { Label } from '~/components/label'
 import type { Route } from './+types/signup'
