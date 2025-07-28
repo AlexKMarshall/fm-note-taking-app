@@ -1,26 +1,28 @@
-import { Form, Link, redirect, useActionData } from 'react-router'
+import { Form, Link, useActionData } from 'react-router'
 
-import { parseWithValibot } from '@conform-to/valibot'
 import { useForm, type SubmissionResult } from '@conform-to/react'
+import { parseWithValibot } from '@conform-to/valibot'
 import type { Route } from './+types/signup'
+import { makeSignupAction } from './_actions/signup-action'
 import { SignupSchema } from './_lib/signup-schema'
-import { Input } from '~/components/input'
-import { Label } from '~/components/label'
+import { Field } from '~/components/field'
 import { FieldDescription } from '~/components/field-description'
 import { FieldError } from '~/components/field-error'
-import { Field } from '~/components/field'
+import { Input } from '~/components/input'
+import { Label } from '~/components/label'
+
+const signupAction = makeSignupAction({
+  saveUser: async () => {
+    // TODO: save user to database
+  },
+})
 
 export async function action({
   request,
 }: Route.ActionArgs): Promise<SubmissionResult | Response> {
   const formData = await request.formData()
-  const submission = parseWithValibot(formData, { schema: SignupSchema })
 
-  if (submission.status !== 'success') {
-    return submission.reply()
-  }
-
-  return redirect('/')
+  return signupAction(formData)
 }
 
 export default function Signup() {

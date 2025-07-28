@@ -46,6 +46,7 @@ export default defineConfig({
           include: ['app/**/*.test.ts'],
           name: 'unit',
           environment: 'node',
+          clearMocks: true,
         },
       },
     ],
