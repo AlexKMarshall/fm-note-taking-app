@@ -70,8 +70,13 @@ async function generateSvgSprite({
  * so only write if the content has changed
  */
 async function writeIfChanged(filepath: string, newContent: string) {
-  const currentContent = await fs.readFile(filepath, 'utf8')
-  if (currentContent !== newContent) {
+  try {
+    const currentContent = await fs.readFile(filepath, 'utf8')
+    if (currentContent !== newContent) {
+      return fs.writeFile(filepath, newContent, 'utf8')
+    }
+  } catch (error) {
+    // File doesn't exist, write it
     return fs.writeFile(filepath, newContent, 'utf8')
   }
 }
