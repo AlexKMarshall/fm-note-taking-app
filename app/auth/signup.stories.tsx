@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import type { Meta } from '@storybook/react-vite'
 import {
   reactRouterParameters,
   withRouter,
@@ -26,15 +26,20 @@ const meta = {
       },
     }),
   },
+  args: {
+    params: {},
+  },
   tags: ['autodocs'],
 } satisfies Meta<typeof SignupRoute>
 
 export default meta
 
-export const Default: StoryObj<typeof meta> = {}
+export const Default = {}
 
-export const SubmitForm: StoryObj<typeof meta> = {
-  play: async ({ canvasElement }) => {
+// Typescript doesn't seem to infer the type of args correctly if we use StoryObj for route components that use the Route.ComponentProps type
+// So using plain object with manual types where necessary
+export const SubmitForm = {
+  play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
     const canvas = within(canvasElement)
     const email = 'test@example.com'
     const password = 's0meR4nd0mP455w0rd'
