@@ -59,3 +59,46 @@ export const SubmitForm = {
     })
   },
 }
+
+export const InvalidSubmission = {
+  parameters: {
+    reactRouter: reactRouterParameters({
+      routing: {
+        action: async () => {
+          return {
+            result: 'error',
+            payload: {
+              email: 'invalid-email',
+              password: 'short',
+            },
+            issues: {
+              nested: {
+                email: ['Invalid email address'],
+                password: ['Password must be at least 8 characters long'],
+              },
+            },
+          }
+        },
+      },
+    }),
+  },
+  play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+    const canvas = within(canvasElement)
+    const emailInput = canvas.getByRole('textbox', { name: 'Email Address' })
+    const passwordInput = canvas.getByLabelText('Password')
+    const signUpButton = canvas.getByRole('button', { name: 'Sign Up' })
+
+    await userEvent.type(emailInput, 'invalid-email')
+    await userEvent.type(passwordInput, 'short')
+    await userEvent.click(signUpButton)
+
+    await expect(emailInput).toBeInvalid()
+    await expect(passwordInput).toBeInvalid()
+    await expect(emailInput).toHaveAccessibleDescription(
+      'Invalid email address',
+    )
+    await expect(passwordInput).toHaveAccessibleDescription(
+      'Password must be at least 8 characters long',
+    )
+  },
+}
