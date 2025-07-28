@@ -1,4 +1,4 @@
-import type { ComponentProps } from 'react'
+import { Fragment, type ComponentProps } from 'react'
 import { Icon } from './icon'
 
 /**
@@ -14,15 +14,17 @@ export function FieldError({
     <p
       {...props}
       // We hide with sr-only so that the container is still in the DOM and so the live region will be announced when errors are added to it
-      className="flex gap-2 text-xs text-red-500 empty:sr-only"
+      className="grid grid-cols-[auto_1fr] gap-2 text-xs text-red-500 empty:sr-only"
       role="alert"
     >
-      <Icon name="icon-info" className="size-4" />
-      <span className="flex flex-col">
-        {errors.map((error) => (
-          <span key={error}>{error}</span>
-        ))}
-      </span>
+      {errors.map((error, index) => (
+        <Fragment key={error}>
+          {index === 0 ? <Icon name="icon-info" className="size-4" /> : null}
+          <span key={error} className="col-start-2">
+            {error}
+          </span>
+        </Fragment>
+      ))}
     </p>
   )
 }

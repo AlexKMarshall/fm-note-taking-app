@@ -75,7 +75,7 @@ async function writeIfChanged(filepath: string, newContent: string) {
     if (currentContent !== newContent) {
       return fs.writeFile(filepath, newContent, 'utf8')
     }
-  } catch (error) {
+  } catch {
     // File doesn't exist, write it
     return fs.writeFile(filepath, newContent, 'utf8')
   }
@@ -96,5 +96,6 @@ async function generateNames({ names }: { names: string[] }) {
     `] as const`,
     '',
     `export type IconName = (typeof iconNames)[number]`,
+    '',
   ].join('\n')
 }
