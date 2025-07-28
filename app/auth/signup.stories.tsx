@@ -52,8 +52,11 @@ export const SubmitForm = {
     await userEvent.type(emailInput, email)
     await userEvent.type(passwordInput, password)
     await userEvent.click(signUpButton)
-    await expect(mockAction).toHaveBeenCalled()
-    await expect(mockAction).toHaveBeenCalledWith({
+
+    await waitFor(() => {
+      expect(mockAction).toHaveBeenCalled()
+    })
+    expect(mockAction).toHaveBeenCalledWith({
       email,
       password,
     })
