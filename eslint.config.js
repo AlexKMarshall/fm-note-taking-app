@@ -35,7 +35,24 @@ export default [
       // React Refresh rules
       'react-refresh/only-export-components': [
         'warn',
-        { allowConstantExport: true },
+        {
+          allowConstantExport: true,
+
+          // React router Framework takes care of these specific exports
+          allowExportNames: [
+            'loader',
+            'clientLoader',
+            'action',
+            'clientAction',
+            'ErrorBoundary',
+            'HydrateFallback',
+            'headers',
+            'handle',
+            'links',
+            'meta',
+            'shouldRevalidate',
+          ],
+        },
       ],
 
       // Override some rules to be less strict
