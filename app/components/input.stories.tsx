@@ -34,3 +34,10 @@ export const Focused: Story = {
     await userEvent.type(canvas.getByRole('textbox'), 'test@example.com')
   },
 }
+
+export const Invalid: Story = {
+  args: {
+    defaultValue: 'invalid-email',
+    'aria-invalid': true,
+  },
+}

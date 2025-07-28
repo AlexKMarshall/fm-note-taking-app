@@ -3,6 +3,9 @@ import * as v from 'valibot'
 import type { Route } from './+types/signup'
 import { Input } from '~/components/input'
 import { Label } from '~/components/label'
+import { FieldDescription } from '~/components/field-description'
+import { FieldError } from '~/components/field-error'
+import { Field } from '~/components/field'
 
 const SignupSchema = v.object({
   email: v.pipe(v.string(), v.email()),
@@ -47,7 +50,7 @@ export default function Signup() {
         </p>
       </div>
       <Form method="post" className="flex flex-col gap-4" noValidate>
-        <div className="flex flex-col gap-2.5">
+        <Field>
           <Label htmlFor="email">Email Address</Label>
           <Input
             id="email"
@@ -58,16 +61,9 @@ export default function Signup() {
             aria-invalid={Boolean(emailError) || undefined}
             aria-describedby={emailError ? 'email-error' : undefined}
           />
-          <p
-            id="email-error"
-            className="flex flex-col text-xs text-red-500 empty:sr-only"
-          >
-            {emailError?.map((error) => (
-              <span key={error}>{error}</span>
-            ))}
-          </p>
-        </div>
-        <div className="flex flex-col gap-2.5">
+          <FieldError errors={emailError} id="email-error" />
+        </Field>
+        <Field>
           <Label htmlFor="password">Password</Label>
           <Input
             id="password"
@@ -79,18 +75,11 @@ export default function Signup() {
             }
             autoComplete="new-password"
           />
-          <p id="password-description" className="text-xs text-gray-600">
+          <FieldDescription id="password-description">
             At least 8 characters
-          </p>
-          <p
-            id="password-error"
-            className="flex flex-col text-xs text-red-500 empty:sr-only"
-          >
-            {passwordError?.map((error) => (
-              <span key={error}>{error}</span>
-            ))}
-          </p>
-        </div>
+          </FieldDescription>
+          <FieldError errors={passwordError} id="password-error" />
+        </Field>
         <button
           type="submit"
           className="cursor-pointer rounded-lg bg-blue-500 px-4 py-3 text-white hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-gray-400"
