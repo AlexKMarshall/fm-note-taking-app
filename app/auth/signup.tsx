@@ -8,8 +8,14 @@ import { FieldError } from '~/components/field-error'
 import { Field } from '~/components/field'
 
 const SignupSchema = v.object({
-  email: v.pipe(v.string(), v.email()),
-  password: v.pipe(v.string(), v.minLength(8)),
+  email: v.pipe(
+    v.string('Please enter a valid email address'),
+    v.email('Please enter a valid email address'),
+  ),
+  password: v.pipe(
+    v.string('Please enter a password'),
+    v.minLength(8, 'Password must be at least 8 characters long'),
+  ),
 })
 
 export async function action({ request }: Route.ActionArgs) {
