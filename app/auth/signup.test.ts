@@ -64,26 +64,62 @@ test('missing email', async () => {
 
   const result = await callSignupAction(request)
 
-  expect(result).toEqual(expect.objectContaining({ result: 'error' }))
+  expect(result).toEqual(
+    expect.objectContaining({
+      result: 'error',
+      issues: {
+        nested: {
+          email: ['Please enter an email address'],
+        },
+      },
+    }),
+  )
 })
 test('missing password', async () => {
   const request = makeSignupRequest({ password: '' })
 
   const result = await callSignupAction(request)
 
-  expect(result).toEqual(expect.objectContaining({ result: 'error' }))
+  expect(result).toEqual(
+    expect.objectContaining({
+      result: 'error',
+      issues: {
+        nested: {
+          password: ['Please enter a password'],
+        },
+      },
+    }),
+  )
 })
 test('password too short', async () => {
   const request = makeSignupRequest({ password: 'short' })
 
   const result = await callSignupAction(request)
 
-  expect(result).toEqual(expect.objectContaining({ result: 'error' }))
+  expect(result).toEqual(
+    expect.objectContaining({
+      result: 'error',
+      issues: {
+        nested: {
+          password: ['Password must be at least 8 characters long'],
+        },
+      },
+    }),
+  )
 })
 test('invalid email', async () => {
   const request = makeSignupRequest({ email: 'invalid-email' })
 
   const result = await callSignupAction(request)
 
-  expect(result).toEqual(expect.objectContaining({ result: 'error' }))
+  expect(result).toEqual(
+    expect.objectContaining({
+      result: 'error',
+      issues: {
+        nested: {
+          email: ['Please enter a valid email address'],
+        },
+      },
+    }),
+  )
 })

@@ -76,7 +76,7 @@ export const InvalidSubmission = {
             },
             issues: {
               nested: {
-                email: ['Invalid email address'],
+                email: ['Please enter a valid email address'],
                 password: ['Password must be at least 8 characters long'],
               },
             },
@@ -96,7 +96,9 @@ export const InvalidSubmission = {
     await userEvent.click(signUpButton)
 
     await waitFor(() => {
-      expect(emailInput).toHaveAccessibleDescription('Invalid email address')
+      expect(emailInput).toHaveAccessibleDescription(
+        'Please enter a valid email address',
+      )
     })
 
     expect(passwordInput).toHaveAccessibleDescription(
