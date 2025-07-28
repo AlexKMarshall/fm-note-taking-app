@@ -10,17 +10,19 @@ import { FieldDescription } from '~/components/field-description'
 import { FieldError } from '~/components/field-error'
 import { Input } from '~/components/input'
 import { Label } from '~/components/label'
-
-const signupAction = makeSignupAction({
-  saveUser: async () => {
-    // TODO: save user to database
-  },
-})
+import { createUser } from '~/data-layer/user'
 
 export async function action({
   request,
+  context,
 }: Route.ActionArgs): Promise<SubmissionResult | Response> {
   const formData = await request.formData()
+
+  const signupAction = makeSignupAction({
+    saveUser: async (userDto) => {
+      return createUser(context.db, userDto)
+    },
+  })
 
   return signupAction(formData)
 }

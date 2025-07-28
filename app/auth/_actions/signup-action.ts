@@ -7,7 +7,7 @@ import { SignupSchema, type SignupData } from '../_lib/signup-schema'
 export function makeSignupAction({
   saveUser,
 }: {
-  saveUser: (user: SignupData) => Promise<void>
+  saveUser: (user: SignupData) => Promise<{ id: number; email: string }>
 }) {
   return async function signupAction(
     formData: FormData,
@@ -20,13 +20,13 @@ export function makeSignupAction({
 
     try {
       await saveUser(submission.value)
+      // TODO: create a session for the user
+      return redirect('/')
     } catch (error) {
       console.error(error)
       return submission.reply({
         formErrors: ['Something went wrong. Please try again later.'],
       })
     }
-
-    return redirect('/')
   }
 }
