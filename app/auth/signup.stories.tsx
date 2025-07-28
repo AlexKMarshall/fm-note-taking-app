@@ -92,13 +92,13 @@ export const InvalidSubmission = {
     await userEvent.type(passwordInput, 'short')
     await userEvent.click(signUpButton)
 
-    await expect(emailInput).toBeInvalid()
-    await expect(passwordInput).toBeInvalid()
     await expect(emailInput).toHaveAccessibleDescription(
       'Invalid email address',
     )
     await expect(passwordInput).toHaveAccessibleDescription(
       'Password must be at least 8 characters long',
     )
+    await expect(emailInput).toBeInvalid()
+    await expect(passwordInput).toBeInvalid()
   },
 }
