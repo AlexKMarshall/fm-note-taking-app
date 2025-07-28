@@ -1,70 +1,38 @@
-import { Form, Link, useActionData } from 'react-router'
-import * as v from 'valibot'
+import { Form, Link, redirect, useActionData } from 'react-router'
 
+import { parseWithValibot } from '@conform-to/valibot'
+import { useForm, type SubmissionResult } from '@conform-to/react'
 import type { Route } from './+types/signup'
+import { SignupSchema } from './_lib/signup-schema'
 import { Input } from '~/components/input'
 import { Label } from '~/components/label'
 import { FieldDescription } from '~/components/field-description'
 import { FieldError } from '~/components/field-error'
 import { Field } from '~/components/field'
 
-/**
- * Transforms an empty string to undefined.
- * This can be used to show different error messages for empty form fields compared with non-empty invalid fields
- */
-const transformEmptyStringToUndefined = v.transform((value) => {
-  if (typeof value !== 'string') {
-    return value
-  }
-
-  if (value.trim() === '') {
-    return undefined
-  }
-
-  return value
-})
-
-const SignupSchema = v.object({
-  email: v.pipe(
-    v.unknown(),
-    transformEmptyStringToUndefined,
-    v.string('Please enter an email address'),
-    v.email('Please enter a valid email address'),
-  ),
-  password: v.pipe(
-    v.unknown(),
-    transformEmptyStringToUndefined,
-    v.string('Please enter a password'),
-    v.minLength(8, 'Password must be at least 8 characters long'),
-  ),
-})
-
-export async function action({ request }: Route.ActionArgs) {
+export async function action({
+  request,
+}: Route.ActionArgs): Promise<SubmissionResult | Response> {
   const formData = await request.formData()
-  const payload = Object.fromEntries(formData)
+  const submission = parseWithValibot(formData, { schema: SignupSchema })
 
-  const result = v.safeParse(SignupSchema, payload)
-
-  if (!result.success) {
-    return {
-      result: 'error',
-      payload,
-      issues: v.flatten<typeof SignupSchema>(result.issues),
-    } as const
+  if (submission.status !== 'success') {
+    return submission.reply()
   }
 
-  // TODO: Implement signup logic and redirect to home page
-  return {
-    result: 'success',
-    payload: result.output,
-    issues: null,
-  } as const
+  return redirect('/')
 }
 
 export default function Signup() {
-  const actionData = useActionData<typeof action>()
-  const emailError = actionData?.issues?.nested?.email
-  const passwordError = actionData?.issues?.nested?.password
+  const lastResult = useActionData<typeof action>()
+
+  const [form, fields] = useForm({
+    lastResult,
+    onValidate: ({ formData }) =>
+      parseWithValibot(formData, { schema: SignupSchema }),
+    shouldValidate: 'onBlur',
+    shouldRevalidate: 'onInput',
+  })
 
   return (
     <>
@@ -76,36 +44,50 @@ export default function Signup() {
           Sign up to start organizing your notes and boost your productivity.
         </p>
       </div>
-      <Form method="post" className="flex flex-col gap-4" noValidate>
+      <Form
+        id={form.id}
+        method="post"
+        onSubmit={form.onSubmit}
+        className="flex flex-col gap-4"
+        noValidate
+      >
         <Field>
-          <Label htmlFor="email">Email Address</Label>
+          <Label htmlFor={fields.email.id}>Email Address</Label>
           <Input
-            id="email"
-            name="email"
+            id={fields.email.id}
+            name={fields.email.name}
+            defaultValue={fields.email.initialValue}
             type="email"
             placeholder="email@example.com"
             autoComplete="email"
-            aria-invalid={Boolean(emailError) || undefined}
-            aria-describedby={emailError ? 'email-error' : undefined}
+            aria-invalid={fields.email.errors ? true : undefined}
+            aria-describedby={
+              fields.email.errors ? fields.email.errorId : undefined
+            }
           />
-          <FieldError errors={emailError} id="email-error" />
+          <FieldError errors={fields.email.errors} id={fields.email.errorId} />
         </Field>
         <Field>
-          <Label htmlFor="password">Password</Label>
+          <Label htmlFor={fields.password.id}>Password</Label>
           <Input
-            id="password"
-            name="password"
+            id={fields.password.id}
+            name={fields.password.name}
             type="password"
-            aria-invalid={Boolean(passwordError) || undefined}
+            aria-invalid={fields.password.errors ? true : undefined}
             aria-describedby={
-              passwordError ? 'password-error' : 'password-description'
+              fields.password.errors
+                ? fields.password.errorId
+                : 'password-description'
             }
             autoComplete="new-password"
           />
           <FieldDescription id="password-description">
             At least 8 characters
           </FieldDescription>
-          <FieldError errors={passwordError} id="password-error" />
+          <FieldError
+            errors={fields.password.errors}
+            id={fields.password.errorId}
+          />
         </Field>
         <button
           type="submit"
