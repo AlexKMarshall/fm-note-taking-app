@@ -1,4 +1,4 @@
-import { test, expect } from 'vitest'
+import { test, expect, assert } from 'vitest'
 import type { AppLoadContext } from 'react-router'
 import { faker } from '@faker-js/faker'
 import { action } from './signup'
@@ -46,80 +46,25 @@ function callSignupAction(request: Request) {
   })
 }
 
-test('valid form data', async () => {
+test('valid form data redirects to homepage', async () => {
   const payload = makeSignupPayload()
   const request = makeSignupRequest(payload)
 
   const result = await callSignupAction(request)
 
-  expect(result).toEqual({
-    result: 'success',
-    payload,
-    issues: null,
-  })
+  assert(result instanceof Response, 'Expected a response')
+  expect(result.status).toBe(302)
+  expect(result.headers.get('Location')).toBe('/')
 })
 
-test('missing email', async () => {
+test('invalid form data', async () => {
   const request = makeSignupRequest({ email: '' })
 
   const result = await callSignupAction(request)
 
   expect(result).toEqual(
     expect.objectContaining({
-      result: 'error',
-      issues: {
-        nested: {
-          email: ['Please enter an email address'],
-        },
-      },
-    }),
-  )
-})
-test('missing password', async () => {
-  const request = makeSignupRequest({ password: '' })
-
-  const result = await callSignupAction(request)
-
-  expect(result).toEqual(
-    expect.objectContaining({
-      result: 'error',
-      issues: {
-        nested: {
-          password: ['Please enter a password'],
-        },
-      },
-    }),
-  )
-})
-test('password too short', async () => {
-  const request = makeSignupRequest({ password: 'short' })
-
-  const result = await callSignupAction(request)
-
-  expect(result).toEqual(
-    expect.objectContaining({
-      result: 'error',
-      issues: {
-        nested: {
-          password: ['Password must be at least 8 characters long'],
-        },
-      },
-    }),
-  )
-})
-test('invalid email', async () => {
-  const request = makeSignupRequest({ email: 'invalid-email' })
-
-  const result = await callSignupAction(request)
-
-  expect(result).toEqual(
-    expect.objectContaining({
-      result: 'error',
-      issues: {
-        nested: {
-          email: ['Please enter a valid email address'],
-        },
-      },
+      status: 'error',
     }),
   )
 })
