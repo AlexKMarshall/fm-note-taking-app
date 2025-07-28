@@ -14,7 +14,7 @@ export function FieldError({
     <p
       {...props}
       // We hide with sr-only so that the container is still in the DOM and so the live region will be announced when errors are added to it
-      className="grid grid-cols-[auto_1fr] gap-2 text-xs text-red-500 empty:sr-only"
+      className="grid grid-cols-[auto_1fr] gap-x-2 text-xs text-red-500 empty:sr-only"
       role="alert"
     >
       {errors.map((error) => (
