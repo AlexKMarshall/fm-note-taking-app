@@ -17,9 +17,9 @@ export function FieldError({
       className="grid grid-cols-[auto_1fr] gap-2 text-xs text-red-500 empty:sr-only"
       role="alert"
     >
-      {errors.map((error, index) => (
+      {errors.map((error) => (
         <Fragment key={error}>
-          {index === 0 ? <Icon name="icon-info" className="size-4" /> : null}
+          <Icon name="icon-info" className="size-4 not-first:hidden" />
           <span key={error} className="col-start-2">
             {error}
           </span>
