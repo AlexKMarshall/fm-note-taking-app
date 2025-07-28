@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import type { Meta } from '@storybook/react-vite'
 import {
   reactRouterParameters,
   withRouter,
@@ -26,15 +26,20 @@ const meta = {
       },
     }),
   },
+  args: {
+    params: {},
+  },
   tags: ['autodocs'],
 } satisfies Meta<typeof SignupRoute>
 
 export default meta
 
-export const Default: StoryObj<typeof meta> = {}
+export const Default = {}
 
-export const SubmitForm: StoryObj<typeof meta> = {
-  play: async ({ canvasElement }) => {
+// Typescript doesn't seem to infer the type of args correctly if we use StoryObj for route components that use the Route.ComponentProps type
+// So using plain object with manual types where necessary
+export const SubmitForm = {
+  play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
     const canvas = within(canvasElement)
     const email = 'test@example.com'
     const password = 's0meR4nd0mP455w0rd'
@@ -52,5 +57,48 @@ export const SubmitForm: StoryObj<typeof meta> = {
       email,
       password,
     })
+  },
+}
+
+export const InvalidSubmission = {
+  parameters: {
+    reactRouter: reactRouterParameters({
+      routing: {
+        action: async () => {
+          return {
+            result: 'error',
+            payload: {
+              email: 'invalid-email',
+              password: 'short',
+            },
+            issues: {
+              nested: {
+                email: ['Invalid email address'],
+                password: ['Password must be at least 8 characters long'],
+              },
+            },
+          }
+        },
+      },
+    }),
+  },
+  play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+    const canvas = within(canvasElement)
+    const emailInput = canvas.getByRole('textbox', { name: 'Email Address' })
+    const passwordInput = canvas.getByLabelText('Password')
+    const signUpButton = canvas.getByRole('button', { name: 'Sign Up' })
+
+    await userEvent.type(emailInput, 'invalid-email')
+    await userEvent.type(passwordInput, 'short')
+    await userEvent.click(signUpButton)
+
+    await expect(emailInput).toBeInvalid()
+    await expect(passwordInput).toBeInvalid()
+    await expect(emailInput).toHaveAccessibleDescription(
+      'Invalid email address',
+    )
+    await expect(passwordInput).toHaveAccessibleDescription(
+      'Password must be at least 8 characters long',
+    )
   },
 }
