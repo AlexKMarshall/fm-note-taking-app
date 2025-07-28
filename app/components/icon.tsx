@@ -1,6 +1,6 @@
 import { type SVGProps } from 'react'
 import { type IconName } from './icons/names'
-import spriteHref from '~/app/components/icons/sprite.svg'
+import spriteHref from './icons/sprite.svg'
 
 export function Icon({
   name,

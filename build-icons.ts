@@ -77,10 +77,9 @@ async function writeIfChanged(filepath: string, newContent: string) {
 }
 
 const typesContent = await generateTypes({
-  names: files
-    .map((file) => JSON.stringify(file))
-    .map((name) => name.replace(/\.svg$/, '')),
+  names: files.map((file) => JSON.stringify(file.replace(/\.svg$/, ''))),
 })
+
 await writeIfChanged(path.join(outputDir, 'names.ts'), typesContent)
 async function generateTypes({ names }: { names: string[] }) {
   return [
