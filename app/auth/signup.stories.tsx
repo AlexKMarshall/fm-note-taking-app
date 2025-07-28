@@ -3,7 +3,7 @@ import {
   reactRouterParameters,
   withRouter,
 } from 'storybook-addon-remix-react-router'
-import { expect, userEvent, within, fn } from 'storybook/test'
+import { expect, userEvent, within, fn, waitFor } from 'storybook/test'
 
 import SignupRoute from './signup'
 
@@ -52,8 +52,11 @@ export const SubmitForm = {
     await userEvent.type(emailInput, email)
     await userEvent.type(passwordInput, password)
     await userEvent.click(signUpButton)
-    await expect(mockAction).toHaveBeenCalled()
-    await expect(mockAction).toHaveBeenCalledWith({
+
+    await waitFor(() => {
+      expect(mockAction).toHaveBeenCalled()
+    })
+    expect(mockAction).toHaveBeenCalledWith({
       email,
       password,
     })
@@ -92,13 +95,14 @@ export const InvalidSubmission = {
     await userEvent.type(passwordInput, 'short')
     await userEvent.click(signUpButton)
 
-    await expect(emailInput).toBeInvalid()
-    await expect(passwordInput).toBeInvalid()
-    await expect(emailInput).toHaveAccessibleDescription(
-      'Invalid email address',
-    )
-    await expect(passwordInput).toHaveAccessibleDescription(
+    await waitFor(() => {
+      expect(emailInput).toHaveAccessibleDescription('Invalid email address')
+    })
+
+    expect(passwordInput).toHaveAccessibleDescription(
       'Password must be at least 8 characters long',
     )
+    expect(emailInput).toBeInvalid()
+    expect(passwordInput).toBeInvalid()
   },
 }
