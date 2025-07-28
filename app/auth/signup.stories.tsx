@@ -99,10 +99,10 @@ export const InvalidSubmission = {
       expect(emailInput).toHaveAccessibleDescription('Invalid email address')
     })
 
-    await expect(passwordInput).toHaveAccessibleDescription(
+    expect(passwordInput).toHaveAccessibleDescription(
       'Password must be at least 8 characters long',
     )
-    await expect(emailInput).toBeInvalid()
-    await expect(passwordInput).toBeInvalid()
+    expect(emailInput).toBeInvalid()
+    expect(passwordInput).toBeInvalid()
   },
 }
