@@ -3,6 +3,8 @@ import * as v from 'valibot'
 import type { Route } from './+types/signup'
 import { Input } from '~/components/input'
 import { Label } from '~/components/label'
+import { FieldDescription } from '~/components/field-description'
+import { FieldError } from '~/components/field-error'
 
 const SignupSchema = v.object({
   email: v.pipe(v.string(), v.email()),
@@ -58,16 +60,9 @@ export default function Signup() {
             aria-invalid={Boolean(emailError) || undefined}
             aria-describedby={emailError ? 'email-error' : undefined}
           />
-          <p
-            id="email-error"
-            className="flex flex-col text-xs text-red-500 empty:sr-only"
-          >
-            {emailError?.map((error) => (
-              <span key={error}>{error}</span>
-            ))}
-          </p>
+          <FieldError errors={emailError} id="email-error" />
         </div>
-        <div className="flex flex-col gap-2.5">
+        <div className="group flex flex-col gap-2.5">
           <Label htmlFor="password">Password</Label>
           <Input
             id="password"
@@ -79,17 +74,10 @@ export default function Signup() {
             }
             autoComplete="new-password"
           />
-          <p id="password-description" className="text-xs text-gray-600">
+          <FieldDescription id="password-description">
             At least 8 characters
-          </p>
-          <p
-            id="password-error"
-            className="flex flex-col text-xs text-red-500 empty:sr-only"
-          >
-            {passwordError?.map((error) => (
-              <span key={error}>{error}</span>
-            ))}
-          </p>
+          </FieldDescription>
+          <FieldError errors={passwordError} id="password-error" />
         </div>
         <button
           type="submit"
