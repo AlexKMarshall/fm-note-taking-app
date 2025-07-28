@@ -52,6 +52,7 @@ export default function Signup() {
         onSubmit={form.onSubmit}
         className="flex flex-col gap-4"
         noValidate
+        aria-describedby={form.errors ? form.errorId : undefined}
       >
         <Field>
           <Label htmlFor={fields.email.id}>Email Address</Label>
@@ -91,12 +92,15 @@ export default function Signup() {
             id={fields.password.errorId}
           />
         </Field>
-        <button
-          type="submit"
-          className="cursor-pointer rounded-lg bg-blue-500 px-4 py-3 text-white hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-gray-400"
-        >
-          Sign Up
-        </button>
+        <div className="flex flex-col gap-2">
+          <button
+            type="submit"
+            className="cursor-pointer rounded-lg bg-blue-500 px-4 py-3 text-white hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-gray-400"
+          >
+            Sign Up
+          </button>
+          <FieldError errors={form.errors} id={form.errorId} />
+        </div>
       </Form>
       <div className="h-px w-full bg-gray-200" />
       <p className="text-center text-sm text-gray-600">

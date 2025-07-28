@@ -6,6 +6,7 @@ import {
 import { expect, userEvent, within, fn, waitFor } from 'storybook/test'
 
 import SignupRoute from './signup'
+import { makeSignupAction } from './_actions/signup-action'
 
 const mockAction = fn()
 
@@ -106,5 +107,39 @@ export const InvalidSubmission = {
     )
     expect(emailInput).toBeInvalid()
     expect(passwordInput).toBeInvalid()
+  },
+}
+
+export const DatabaseError = {
+  parameters: {
+    reactRouter: reactRouterParameters({
+      routing: {
+        action: async ({ request }: { request: Request }) => {
+          const signupActionWithDatabaseError = makeSignupAction({
+            saveUser: async () => {
+              throw new Error('Database error')
+            },
+          })
+          const formData = await request.formData()
+          return signupActionWithDatabaseError(formData)
+        },
+      },
+    }),
+  },
+  play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+    const canvas = within(canvasElement)
+    const emailInput = canvas.getByRole('textbox', { name: 'Email Address' })
+    const passwordInput = canvas.getByLabelText('Password')
+    const signUpButton = canvas.getByRole('button', { name: 'Sign Up' })
+
+    await userEvent.type(emailInput, 'test@example.com')
+    await userEvent.type(passwordInput, 's0meR4nd0mP455w0rd')
+    await userEvent.click(signUpButton)
+
+    await waitFor(() => {
+      expect(
+        canvas.getByText('Something went wrong. Please try again later.'),
+      ).toBeVisible()
+    })
   },
 }
