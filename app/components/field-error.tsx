@@ -20,9 +20,7 @@ export function FieldError({
       {errors.map((error) => (
         <Fragment key={error}>
           <Icon name="icon-info" className="size-4 not-first:hidden" />
-          <span key={error} className="col-start-2">
-            {error}
-          </span>
+          <span className="col-start-2">{error}</span>
         </Fragment>
       ))}
     </p>
