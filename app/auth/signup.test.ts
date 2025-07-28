@@ -69,7 +69,7 @@ test('missing email', async () => {
       result: 'error',
       issues: {
         nested: {
-          email: ['Please enter a valid email address'],
+          email: ['Please enter an email address'],
         },
       },
     }),
