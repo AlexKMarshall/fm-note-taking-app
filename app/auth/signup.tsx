@@ -5,6 +5,7 @@ import { Input } from '~/components/input'
 import { Label } from '~/components/label'
 import { FieldDescription } from '~/components/field-description'
 import { FieldError } from '~/components/field-error'
+import { Field } from '~/components/field'
 
 const SignupSchema = v.object({
   email: v.pipe(v.string(), v.email()),
@@ -49,7 +50,7 @@ export default function Signup() {
         </p>
       </div>
       <Form method="post" className="flex flex-col gap-4" noValidate>
-        <div className="flex flex-col gap-2.5">
+        <Field>
           <Label htmlFor="email">Email Address</Label>
           <Input
             id="email"
@@ -61,8 +62,8 @@ export default function Signup() {
             aria-describedby={emailError ? 'email-error' : undefined}
           />
           <FieldError errors={emailError} id="email-error" />
-        </div>
-        <div className="group flex flex-col gap-2.5">
+        </Field>
+        <Field>
           <Label htmlFor="password">Password</Label>
           <Input
             id="password"
@@ -78,7 +79,7 @@ export default function Signup() {
             At least 8 characters
           </FieldDescription>
           <FieldError errors={passwordError} id="password-error" />
-        </div>
+        </Field>
         <button
           type="submit"
           className="cursor-pointer rounded-lg bg-blue-500 px-4 py-3 text-white hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-gray-400"
