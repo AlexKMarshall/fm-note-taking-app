@@ -1,0 +1,2 @@
+SESSION_SECRET=only-used-in-test-so-does-not-matter
+ENVIRONMENT=test 
