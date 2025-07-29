@@ -1,26 +1,30 @@
-import { Form, Link, redirect, useActionData } from 'react-router'
+import { Form, Link, useActionData } from 'react-router'
 
-import { parseWithValibot } from '@conform-to/valibot'
 import { useForm, type SubmissionResult } from '@conform-to/react'
+import { parseWithValibot } from '@conform-to/valibot'
 import type { Route } from './+types/signup'
+import { makeSignupAction } from './_actions/signup-action'
 import { SignupSchema } from './_lib/signup-schema'
-import { Input } from '~/components/input'
-import { Label } from '~/components/label'
+import { Field } from '~/components/field'
 import { FieldDescription } from '~/components/field-description'
 import { FieldError } from '~/components/field-error'
-import { Field } from '~/components/field'
+import { Input } from '~/components/input'
+import { Label } from '~/components/label'
+import { createUser } from '~/data-layer/user'
 
 export async function action({
   request,
+  context,
 }: Route.ActionArgs): Promise<SubmissionResult | Response> {
   const formData = await request.formData()
-  const submission = parseWithValibot(formData, { schema: SignupSchema })
 
-  if (submission.status !== 'success') {
-    return submission.reply()
-  }
+  const signupAction = makeSignupAction({
+    saveUser: async (userDto) => {
+      return createUser(context.db, userDto)
+    },
+  })
 
-  return redirect('/')
+  return signupAction(formData)
 }
 
 export default function Signup() {
@@ -50,6 +54,7 @@ export default function Signup() {
         onSubmit={form.onSubmit}
         className="flex flex-col gap-4"
         noValidate
+        aria-describedby={form.errors ? form.errorId : undefined}
       >
         <Field>
           <Label htmlFor={fields.email.id}>Email Address</Label>
@@ -89,12 +94,15 @@ export default function Signup() {
             id={fields.password.errorId}
           />
         </Field>
-        <button
-          type="submit"
-          className="cursor-pointer rounded-lg bg-blue-500 px-4 py-3 text-white hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-gray-400"
-        >
-          Sign Up
-        </button>
+        <div className="flex flex-col gap-2">
+          <button
+            type="submit"
+            className="cursor-pointer rounded-lg bg-blue-500 px-4 py-3 text-white hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-gray-400"
+          >
+            Sign Up
+          </button>
+          <FieldError errors={form.errors} id={form.errorId} />
+        </div>
       </Form>
       <div className="h-px w-full bg-gray-200" />
       <p className="text-center text-sm text-gray-600">

@@ -4,3 +4,4 @@ pnpm-lock.yaml
 vitest.shims.d.ts
 worker-configuration.d.ts
 app/components/icon/names.ts
+drizzle/
