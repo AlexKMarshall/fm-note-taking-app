@@ -64,7 +64,7 @@ export default function Login() {
             type="submit"
             className="cursor-pointer rounded-lg bg-blue-500 px-4 py-3 text-white hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-gray-400"
           >
-            Sign Up
+            Login
           </button>
           <FieldError errors={form.errors} id={form.errorId} />
         </Stack>

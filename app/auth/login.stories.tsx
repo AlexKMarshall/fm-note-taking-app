@@ -48,11 +48,11 @@ export const SubmitForm = {
     const emailInput = canvas.getByRole('textbox', { name: 'Email Address' })
     // Input type="password" do not have an accessible role, so we use the label text
     const passwordInput = canvas.getByLabelText('Password')
-    const signUpButton = canvas.getByRole('button', { name: 'Sign Up' })
+    const loginButton = canvas.getByRole('button', { name: 'Login' })
 
     await userEvent.type(emailInput, email)
     await userEvent.type(passwordInput, password)
-    await userEvent.click(signUpButton)
+    await userEvent.click(loginButton)
 
     await waitFor(() => {
       expect(mockAction).toHaveBeenCalled()
@@ -80,11 +80,11 @@ export const InvalidSubmission = {
     const canvas = within(canvasElement)
     const emailInput = canvas.getByRole('textbox', { name: 'Email Address' })
     const passwordInput = canvas.getByLabelText('Password')
-    const signUpButton = canvas.getByRole('button', { name: 'Sign Up' })
+    const loginButton = canvas.getByRole('button', { name: 'Login' })
 
     await userEvent.type(emailInput, 'invalid-email')
     await userEvent.clear(passwordInput)
-    await userEvent.click(signUpButton)
+    await userEvent.click(loginButton)
 
     await waitFor(() => {
       expect(emailInput).toHaveAccessibleDescription(
