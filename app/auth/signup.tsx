@@ -11,6 +11,7 @@ import { FieldError } from '~/components/field-error'
 import { Input } from '~/components/input'
 import { Label } from '~/components/label'
 import { createUser } from '~/data-layer/user'
+import { Stack } from '~/components/stack'
 
 export async function action({
   request,
@@ -40,14 +41,14 @@ export default function Signup() {
 
   return (
     <>
-      <div className="flex flex-col items-center gap-2 text-center">
+      <Stack align="center" gap="2" className="text-center">
         <h1 className="text-2xl font-bold text-gray-950">
           Create Your Account
         </h1>
         <p className="text-sm text-gray-600">
           Sign up to start organizing your notes and boost your productivity.
         </p>
-      </div>
+      </Stack>
       <Form
         id={form.id}
         method="post"
@@ -94,7 +95,7 @@ export default function Signup() {
             id={fields.password.errorId}
           />
         </Field>
-        <div className="flex flex-col gap-2">
+        <Stack gap="2">
           <button
             type="submit"
             className="cursor-pointer rounded-lg bg-blue-500 px-4 py-3 text-white hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-gray-400"
@@ -102,7 +103,7 @@ export default function Signup() {
             Sign Up
           </button>
           <FieldError errors={form.errors} id={form.errorId} />
-        </div>
+        </Stack>
       </Form>
       <div className="h-px w-full bg-gray-200" />
       <p className="text-center text-sm text-gray-600">
