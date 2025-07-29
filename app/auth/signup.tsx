@@ -1,6 +1,10 @@
 import { Form, Link, useActionData } from 'react-router'
 
-import { useForm, type SubmissionResult } from '@conform-to/react'
+import {
+  getInputProps,
+  useForm,
+  type SubmissionResult,
+} from '@conform-to/react'
 import { parseWithValibot } from '@conform-to/valibot'
 import type { Route } from './+types/signup'
 import { makeSignupAction } from './_actions/signup-action'
@@ -60,31 +64,22 @@ export default function Signup() {
         <Field>
           <Label htmlFor={fields.email.id}>Email Address</Label>
           <Input
-            id={fields.email.id}
-            name={fields.email.name}
-            defaultValue={fields.email.initialValue}
-            type="email"
+            {...getInputProps(fields.email, { type: 'email' })}
             placeholder="email@example.com"
             autoComplete="email"
-            aria-invalid={fields.email.errors ? true : undefined}
-            aria-describedby={
-              fields.email.errors ? fields.email.errorId : undefined
-            }
           />
           <FieldError errors={fields.email.errors} id={fields.email.errorId} />
         </Field>
         <Field>
           <Label htmlFor={fields.password.id}>Password</Label>
           <Input
-            id={fields.password.id}
-            name={fields.password.name}
-            type="password"
-            aria-invalid={fields.password.errors ? true : undefined}
-            aria-describedby={
-              fields.password.errors
-                ? fields.password.errorId
-                : 'password-description'
-            }
+            {...getInputProps(fields.password, {
+              type: 'password',
+              // We only want to pass an additional description if the field doesn't have an error
+              ariaDescribedBy: fields.password.errors
+                ? undefined
+                : 'password-description',
+            })}
             autoComplete="new-password"
           />
           <FieldDescription id="password-description">
