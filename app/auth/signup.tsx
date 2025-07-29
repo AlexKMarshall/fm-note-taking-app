@@ -2,6 +2,7 @@ import { Form, Link, useActionData } from 'react-router'
 
 import {
   getInputProps,
+  getFormProps,
   useForm,
   type SubmissionResult,
 } from '@conform-to/react'
@@ -54,12 +55,9 @@ export default function Signup() {
         </p>
       </Stack>
       <Form
-        id={form.id}
         method="post"
-        onSubmit={form.onSubmit}
+        {...getFormProps(form)}
         className="flex flex-col gap-4"
-        noValidate
-        aria-describedby={form.errors ? form.errorId : undefined}
       >
         <Field>
           <Label htmlFor={fields.email.id}>Email Address</Label>
