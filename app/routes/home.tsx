@@ -1,29 +1,30 @@
+import { redirect } from 'react-router'
 import type { Route } from './+types/home'
 
 export async function loader({ context, request }: Route.LoaderArgs) {
-  console.log('cloudflare env', context.cloudflare.env)
-  console.log(
-    'SESSION_SECRET from context:',
-    context.cloudflare.env.SESSION_SECRET,
-  )
-  console.log('SESSION_SECRET from process.env:', process.env.SESSION_SECRET)
-
-  // Test session functionality using context.sessionStorage
-  console.log('=== SESSION TEST ===')
-  console.log('Request cookies:', request.headers.get('Cookie'))
-
   const session = await context.sessionStorage.getSession(
     request.headers.get('Cookie'),
   )
-  console.log('Session object:', session)
-  console.log('Session data:', session.data)
-  console.log('Session has data:', Object.keys(session.data).length > 0)
-  console.log('Session is empty:', Object.keys(session.data).length === 0)
-  console.log('=== END SESSION TEST ===')
 
-  return null
+  // Check if user is authenticated
+  const userId = session.get('userId')
+
+  if (!userId) {
+    // No session found, redirect to login
+    throw redirect('/login')
+  }
+
+  // User is authenticated, return user data or whatever you need
+  return { userId }
 }
 
-export default function Home() {
-  return <div>Home</div>
+export default function Home({ loaderData }: Route.ComponentProps) {
+  const { userId } = loaderData
+
+  return (
+    <div>
+      <h1>Welcome to the Home Page</h1>
+      <p>You are logged in as user ID: {userId}</p>
+    </div>
+  )
 }
