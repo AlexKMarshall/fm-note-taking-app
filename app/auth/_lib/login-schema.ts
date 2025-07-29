@@ -1,7 +1,7 @@
 import * as v from 'valibot'
 import { transformEmptyStringToUndefined } from '~/lib/validation'
 
-export const SignupSchema = v.object({
+export const LoginSchema = v.object({
   email: v.pipe(
     v.unknown(),
     transformEmptyStringToUndefined,
@@ -12,7 +12,6 @@ export const SignupSchema = v.object({
     v.unknown(),
     transformEmptyStringToUndefined,
     v.string('Please enter a password'),
-    v.minLength(8, 'Password must be at least 8 characters long'),
   ),
 })
-export type SignupData = v.InferOutput<typeof SignupSchema>
+export type LoginData = v.InferOutput<typeof LoginSchema>

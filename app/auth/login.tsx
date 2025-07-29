@@ -1,45 +1,22 @@
-import { Form, Link, useActionData } from 'react-router'
-
-import {
-  getInputProps,
-  getFormProps,
-  useForm,
-  type SubmissionResult,
-} from '@conform-to/react'
 import { parseWithValibot } from '@conform-to/valibot'
-import type { Route } from './+types/signup'
-import { makeSignupAction } from './_actions/signup-action'
-import { SignupSchema } from './_lib/signup-schema'
+import { getFormProps, useForm, getInputProps } from '@conform-to/react'
+import { useActionData, Form, Link } from 'react-router'
+import { LoginSchema } from './_lib/login-schema'
+import { Stack } from '~/components/stack'
 import { Field } from '~/components/field'
-import { FieldDescription } from '~/components/field-description'
 import { FieldError } from '~/components/field-error'
 import { Input } from '~/components/input'
 import { Label } from '~/components/label'
-import { createUser } from '~/data-layer/user'
-import { Stack } from '~/components/stack'
 
-export async function action({
-  request,
-  context,
-}: Route.ActionArgs): Promise<SubmissionResult | Response> {
-  const formData = await request.formData()
+export async function action() {}
 
-  const signupAction = makeSignupAction({
-    saveUser: async (userDto) => {
-      return createUser(context.db, userDto)
-    },
-  })
-
-  return signupAction(formData)
-}
-
-export default function Signup() {
+export default function Login() {
   const lastResult = useActionData<typeof action>()
 
   const [form, fields] = useForm({
     lastResult,
     onValidate: ({ formData }) =>
-      parseWithValibot(formData, { schema: SignupSchema }),
+      parseWithValibot(formData, { schema: LoginSchema }),
     shouldValidate: 'onBlur',
     shouldRevalidate: 'onInput',
   })
@@ -47,12 +24,8 @@ export default function Signup() {
   return (
     <>
       <Stack align="center" gap="2" className="text-center">
-        <h1 className="text-2xl font-bold text-gray-950">
-          Create Your Account
-        </h1>
-        <p className="text-sm text-gray-600">
-          Sign up to start organizing your notes and boost your productivity.
-        </p>
+        <h1 className="text-2xl font-bold text-gray-950">Welcome to Note</h1>
+        <p className="text-sm text-gray-600">Please log in to continue</p>
       </Stack>
       <Form
         method="post"
@@ -73,16 +46,9 @@ export default function Signup() {
           <Input
             {...getInputProps(fields.password, {
               type: 'password',
-              // We only want to pass an additional description if the field doesn't have an error
-              ariaDescribedBy: fields.password.errors
-                ? undefined
-                : 'password-description',
             })}
-            autoComplete="new-password"
+            autoComplete="current-password"
           />
-          <FieldDescription id="password-description">
-            At least 8 characters
-          </FieldDescription>
           <FieldError
             errors={fields.password.errors}
             id={fields.password.errorId}
@@ -100,9 +66,9 @@ export default function Signup() {
       </Form>
       <div className="h-px w-full bg-gray-200" />
       <p className="text-center text-sm text-gray-600">
-        Already have an account?{' '}
-        <Link to="/login" className="text-gray-950">
-          Login
+        No account yet?{' '}
+        <Link to="/signup" className="text-gray-950">
+          Sign Up
         </Link>
       </p>
     </>
