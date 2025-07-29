@@ -1,14 +1,19 @@
 import { parseWithValibot } from '@conform-to/valibot'
 import { getFormProps, useForm, getInputProps } from '@conform-to/react'
 import { useActionData, Form, Link } from 'react-router'
+import type { Route } from './+types/login'
 import { LoginSchema } from './_lib/login-schema'
+import { loginAction } from './_actions/login-action'
 import { Stack } from '~/components/stack'
 import { Field } from '~/components/field'
 import { FieldError } from '~/components/field-error'
 import { Input } from '~/components/input'
 import { Label } from '~/components/label'
 
-export async function action() {}
+export async function action({ request }: Route.ActionArgs) {
+  const formData = await request.formData()
+  return loginAction(formData)
+}
 
 export default function Login() {
   const lastResult = useActionData<typeof action>()
