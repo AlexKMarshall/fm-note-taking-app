@@ -1,0 +1,2 @@
+SESSION_SECRET=dev-example-value-for-testing 
+# ENVIRONMENT=development # uncomment this to run in development mode

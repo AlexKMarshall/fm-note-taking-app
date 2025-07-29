@@ -9,6 +9,7 @@
 # Cloudflare
 .mf
 .wrangler
+.dev.vars
 
 *storybook.log
 storybook-static
