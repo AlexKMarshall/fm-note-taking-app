@@ -29,6 +29,7 @@ export function createSessionStorage(env: {
       sameSite: 'lax',
       secrets: [SESSION_SECRET],
       secure: isProduction,
+      maxAge: 60 * 60 * 24 * 30, // 30 days
     }),
   })
 }
