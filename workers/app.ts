@@ -22,7 +22,7 @@ const requestHandler = createRequestHandler(
 export default {
   async fetch(request, env, ctx) {
     const db = drizzle(env.DB, { schema })
-    const sessionStorage = createSessionStorage(env, request)
+    const sessionStorage = createSessionStorage(env)
 
     return requestHandler(request, {
       cloudflare: { env, ctx },

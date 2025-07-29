@@ -7,10 +7,10 @@ type SessionData = {
   userId: number
 }
 
-export function createSessionStorage(
-  env: { SESSION_SECRET: string },
-  request?: Request,
-) {
+export function createSessionStorage(env: {
+  SESSION_SECRET: string
+  ENVIRONMENT: string
+}) {
   const SESSION_SECRET = v.parse(
     v.pipe(
       v.unknown(),
@@ -20,12 +20,7 @@ export function createSessionStorage(
     env.SESSION_SECRET,
   )
 
-  // Determine if we're in production based on the request URL
-  // In development, we're typically on localhost
-  // In production, we're on the Cloudflare domain
-  const isProduction = request
-    ? !request.url.includes('localhost') && !request.url.includes('127.0.0.1')
-    : false
+  const isProduction = env.ENVIRONMENT === 'production'
 
   return createCookieSessionStorage<SessionData>({
     cookie: createCookie('session', {
