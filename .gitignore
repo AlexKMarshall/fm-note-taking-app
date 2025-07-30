@@ -9,12 +9,13 @@
 # Cloudflare
 .mf
 .wrangler
-.dev.vars
+.dev.vars*
+!.dev.vars.example
+!.dev.vars.test
 
 *storybook.log
 storybook-static
 
-# Playwright
 # Playwright
 /test-results/
 /playwright-report/
