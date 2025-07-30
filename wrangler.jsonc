@@ -3,9 +3,7 @@
   "name": "react-router-app",
   "compatibility_date": "2025-04-04",
   "main": "./workers/app.ts",
-  "vars": {
-    "SESSION_SECRET": "",
-  },
+  "vars": {},
   "d1_databases": [
     {
       "binding": "DB",
@@ -17,19 +15,24 @@
   "env": {
     "production": {
       "vars": {
-        "SESSION_SECRET": "",
         "ENVIRONMENT": "production",
       },
     },
     "development": {
       "vars": {
-        "SESSION_SECRET": "",
         "ENVIRONMENT": "development",
       },
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "your-database-name",
+          "database_id": "your-database-id",
+          "migrations_dir": "drizzle",
+        },
+      ],
     },
     "test": {
       "vars": {
-        "SESSION_SECRET": "",
         "ENVIRONMENT": "test",
       },
       "d1_databases": [
