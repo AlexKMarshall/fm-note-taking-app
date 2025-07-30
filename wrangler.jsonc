@@ -4,9 +4,7 @@
   "compatibility_date": "2025-04-04",
   "main": "./workers/app.ts",
   "vars": {
-    "VALUE_FROM_CLOUDFLARE": "Hello from Cloudflare",
-    "SESSION_SECRET": "placeholder-value-for-types",
-    "ENVIRONMENT": "production",
+    "SESSION_SECRET": "",
   },
   "d1_databases": [
     {
@@ -16,4 +14,32 @@
       "migrations_dir": "drizzle",
     },
   ],
+  "env": {
+    "production": {
+      "vars": {
+        "SESSION_SECRET": "",
+        "ENVIRONMENT": "production",
+      },
+    },
+    "development": {
+      "vars": {
+        "SESSION_SECRET": "",
+        "ENVIRONMENT": "development",
+      },
+    },
+    "test": {
+      "vars": {
+        "SESSION_SECRET": "",
+        "ENVIRONMENT": "test",
+      },
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "your-database-name",
+          "database_id": "your-database-id",
+          "migrations_dir": "drizzle",
+        },
+      ],
+    },
+  },
 }
