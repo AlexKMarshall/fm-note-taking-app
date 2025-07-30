@@ -20,13 +20,14 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "test": "vitest",
-    "test:e2e": "playwright test",
+    "test:e2e": "dotenv -e .dev.vars.test -- playwright test",
     "chromatic": "npx chromatic --exit-zero-on-changes",
     "build:icons": "tsx ./build-icons.ts"
   },
   "dependencies": {
     "@conform-to/react": "1.8.2",
     "@conform-to/valibot": "1.8.2",
+    "dotenv": "^17.2.1",
     "drizzle-orm": "0.44.4",
     "isbot": "5.1.28",
     "react": "19.1.0",

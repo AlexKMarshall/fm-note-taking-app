@@ -2,6 +2,7 @@
 import { test as testBase } from '@playwright/test'
 import setCookieParser from 'set-cookie-parser'
 import { createSessionCookie } from '../app/session.server'
+import { validatedTestEnvironment } from './test-environment'
 
 type TestOptions = {
   /** Is the test user authenticated?
@@ -17,10 +18,7 @@ export const test = testBase.extend<TestOptions>({
     if (authStatus === 'authenticated') {
       // TODO: actually create a user in the database and use that id to create a session cookie
       // We'll create a mock session cookie and save it to the page
-      const sessionCookie = createSessionCookie({
-        SESSION_SECRET: 'only-used-in-test-so-does-not-matter', // TODO: read from .dev.vars.test when starting playwright tests
-        ENVIRONMENT: 'test',
-      })
+      const sessionCookie = createSessionCookie(validatedTestEnvironment)
 
       const cookieHeader = await sessionCookie.serialize({
         userId: 123,
