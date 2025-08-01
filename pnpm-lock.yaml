@@ -97,8 +97,8 @@ importers:
         specifier: 3.2.4
         version: 3.2.4(@vitest/browser@3.2.4)(vitest@3.2.4)
       chromatic:
-        specifier: 13.1.2
-        version: 13.1.2
+        specifier: 13.1.3
+        version: 13.1.3
       dotenv-cli:
         specifier: 7.4.4
         version: 7.4.4
@@ -1839,8 +1839,8 @@ packages:
       '@chromatic-com/playwright':
         optional: true
 
-  chromatic@13.1.2:
-    resolution: {integrity: sha512-jgVptQabJHOnzmmvLjbtfutREkWGhDDk2gVqMH6N+V7z56oIy4Sd2/U7ZxNvnVFPinZQMSjSdUce4b6JIP64Dg==}
+  chromatic@13.1.3:
+    resolution: {integrity: sha512-aOZDwg1PsDe9/UhiXqS6EJPoCGK91hYbj3HaunV/0Ij492eWLkXIzku/e5cF1t7Ma7cAuGpCQDo0vGHg0UO91w==}
     hasBin: true
     peerDependencies:
       '@chromatic-com/cypress': ^0.*.* || ^1.0.0
@@ -5425,7 +5425,7 @@ snapshots:
 
   chromatic@12.2.0: {}
 
-  chromatic@13.1.2: {}
+  chromatic@13.1.3: {}
 
   color-convert@2.0.1:
     dependencies:
