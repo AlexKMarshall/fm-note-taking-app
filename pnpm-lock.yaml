@@ -136,7 +136,7 @@ importers:
         specifier: 0.6.14
         version: 0.6.14(prettier@3.6.2)
       set-cookie-parser:
-        specifier: ^2.7.1
+        specifier: 2.7.1
         version: 2.7.1
       storybook:
         specifier: 9.0.18
