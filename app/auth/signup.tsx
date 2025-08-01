@@ -1,8 +1,8 @@
 import { Form, Link, useActionData } from 'react-router'
 
 import {
-  getInputProps,
   getFormProps,
+  getInputProps,
   useForm,
   type SubmissionResult,
 } from '@conform-to/react'
@@ -15,8 +15,8 @@ import { FieldDescription } from '~/components/field-description'
 import { FieldError } from '~/components/field-error'
 import { Input } from '~/components/input'
 import { Label } from '~/components/label'
-import { createUser } from '~/data-layer/user'
 import { Stack } from '~/components/stack'
+import { UserRepository, UserService } from '~/features/user/user-service'
 
 export async function action({
   request,
@@ -25,9 +25,7 @@ export async function action({
   const formData = await request.formData()
 
   const signupAction = makeSignupAction({
-    saveUser: async (userDto) => {
-      return createUser(context.db, userDto)
-    },
+    userService: new UserService(new UserRepository(context.db)),
   })
 
   return signupAction(formData)

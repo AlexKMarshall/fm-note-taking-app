@@ -2,12 +2,13 @@ import { redirect } from 'react-router'
 
 import { type SubmissionResult } from '@conform-to/react'
 import { parseWithValibot } from '@conform-to/valibot'
-import { SignupSchema, type SignupData } from '../_lib/signup-schema'
+import { SignupSchema } from '../_lib/signup-schema'
+import { UserService } from '~/features/user/user-service'
 
 export function makeSignupAction({
-  saveUser,
+  userService,
 }: {
-  saveUser: (user: SignupData) => Promise<{ id: number; email: string }>
+  userService: UserService
 }) {
   return async function signupAction(
     formData: FormData,
@@ -19,7 +20,7 @@ export function makeSignupAction({
     }
 
     try {
-      await saveUser(submission.value)
+      await userService.signup(submission.value)
       // TODO: create a session for the user
       return redirect('/')
     } catch (error) {
