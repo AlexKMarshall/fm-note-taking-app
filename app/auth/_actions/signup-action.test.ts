@@ -1,13 +1,14 @@
 import { faker } from '@faker-js/faker'
 import { assert, expect, test, vi } from 'vitest'
 import { makeSignupAction } from './signup-action'
+import { UserService, type IUserRepository } from '~/features/user/user-service'
 
-const mockSaveUser = vi.fn()
-mockSaveUser.mockName('saveUser')
+const mockCreateUser = vi.fn()
+mockCreateUser.mockName('createUser')
 
-const signupAction = makeSignupAction({
-  saveUser: mockSaveUser,
-})
+const mockUserRepository: IUserRepository = {
+  create: mockCreateUser,
+}
 
 function makeSignupPayload({
   email = faker.internet.email(),
@@ -34,26 +35,37 @@ function makeSignupFormData({
 }
 
 test('valid form data redirects to homepage', async () => {
+  const signupAction = makeSignupAction({
+    userService: new UserService(mockUserRepository),
+  })
   const payload = makeSignupPayload()
   const formData = makeSignupFormData(payload)
 
   const result = await signupAction(formData)
 
   assert(result instanceof Response, 'Expected a response')
-  expect(mockSaveUser).toHaveBeenCalledWith(payload)
-  expect(result.status).toBe(302)
-  expect(result.headers.get('Location')).toBe('/')
+
+  expect.soft(result.status).toBe(302)
+  expect.soft(result.headers.get('Location')).toBe('/')
+  expect.soft(mockCreateUser).toHaveBeenCalledWith({
+    user: { email: payload.email },
+    password: { hash: expect.any(String) },
+  })
+  expect.soft(mockCreateUser).toHaveBeenCalledOnce()
 })
 
 test('invalid form data', async () => {
+  const signupAction = makeSignupAction({
+    userService: new UserService(mockUserRepository),
+  })
   const formData = makeSignupFormData({ email: '' })
 
   const result = await signupAction(formData)
 
-  expect(result).toEqual(
+  expect.soft(result).toEqual(
     expect.objectContaining({
       status: 'error',
     }),
   )
-  expect(mockSaveUser).not.toHaveBeenCalled()
+  expect.soft(mockCreateUser).not.toHaveBeenCalled()
 })

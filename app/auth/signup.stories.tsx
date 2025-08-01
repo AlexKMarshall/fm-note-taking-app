@@ -7,6 +7,7 @@ import { expect, userEvent, within, fn, waitFor } from 'storybook/test'
 
 import SignupRoute from './signup'
 import { makeSignupAction } from './_actions/signup-action'
+import { UserService } from '~/features/user/user-service'
 
 const mockAction = fn()
 
@@ -116,9 +117,11 @@ export const DatabaseError = {
       routing: {
         action: async ({ request }: { request: Request }) => {
           const signupActionWithDatabaseError = makeSignupAction({
-            saveUser: async () => {
-              throw new Error('Database error')
-            },
+            userService: new UserService({
+              create: async () => {
+                throw new Error('Database error')
+              },
+            }),
           })
           const formData = await request.formData()
           return signupActionWithDatabaseError(formData)

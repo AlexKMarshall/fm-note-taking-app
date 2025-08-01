@@ -1,11 +1,5 @@
-import { type AppLoadContext } from 'react-router'
-// import { eq } from 'drizzle-orm'
-import { users } from '~/database/schema'
-
-type Database = AppLoadContext['db']
-
 /**  Web Crypto API password hashing using PBKDF2 */
-async function hashPassword(password: string): Promise<string> {
+export async function hashPassword(password: string): Promise<string> {
   // Generate a random salt
   const salt = crypto.getRandomValues(new Uint8Array(16))
 
@@ -95,48 +89,4 @@ async function hashPassword(password: string): Promise<string> {
 //   } catch {
 //     return false
 //   }
-// }
-
-export async function createUser(
-  db: Database,
-  userDto: { email: string; password: string },
-) {
-  const passwordHash = await hashPassword(userDto.password)
-  const [user] = await db
-    .insert(users)
-    .values({
-      email: userDto.email,
-      passwordHash,
-    })
-    .returning({ id: users.id, email: users.email })
-
-  return user
-}
-
-// We'll use this later
-// export async function verifyUserPassword(
-//   db: Database,
-//   email: string,
-//   password: string,
-// ): Promise<{ id: number; email: string } | null> {
-//   const [user] = await db
-//     .select({
-//       id: users.id,
-//       email: users.email,
-//       passwordHash: users.passwordHash,
-//     })
-//     .from(users)
-//     .where(eq(users.email, email))
-//     .limit(1)
-
-//   if (!user) {
-//     return null
-//   }
-
-//   const isValid = await verifyPassword(password, user.passwordHash)
-//   if (!isValid) {
-//     return null
-//   }
-
-//   return { id: user.id, email: user.email }
 // }
