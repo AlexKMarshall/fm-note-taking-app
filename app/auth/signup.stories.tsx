@@ -121,7 +121,7 @@ export const DatabaseError = {
               create: async () => {
                 throw new Error('Database error')
               },
-              get: fn(),
+              get: async () => null,
               getUserPasswordHash: fn(),
             }),
           })
