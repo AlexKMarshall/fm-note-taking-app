@@ -121,6 +121,8 @@ export const DatabaseError = {
               create: async () => {
                 throw new Error('Database error')
               },
+              get: fn(),
+              getUserPasswordHash: fn(),
             }),
           })
           const formData = await request.formData()
