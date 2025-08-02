@@ -1,6 +1,7 @@
 import { type ComponentProps, type ReactNode } from 'react'
 import { tv } from 'tailwind-variants'
 import { Icon } from './icon'
+import type { IconName } from './icon/names'
 
 const inputStyles = tv({
   slots: {
@@ -8,8 +9,13 @@ const inputStyles = tv({
     input:
       'col-span-full row-start-1 rounded-lg border border-gray-300 px-4 py-3 invalid:border-red-500 hover:bg-gray-50 focus-visible:border-gray-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-500 aria-invalid:border-red-500',
     adornmentIcon: 'size-5 text-gray-500',
-    startAdornment: 'col-start-1 row-start-1 self-center pl-4',
-    endAdornment: 'col-start-3 row-start-1 self-center pr-4',
+    startAdornment:
+      'pointer-events-none col-start-1 row-start-1 self-center pl-4',
+    endAdornment:
+      'pointer-events-none col-start-3 row-start-1 self-center pr-4',
+    // Includes a 48x48px click target pseudo-element for coarse pointer users
+    adornmentButton:
+      'pointer-events-auto relative block rounded not-pointer-fine:after:absolute not-pointer-fine:after:top-1/2 not-pointer-fine:after:left-1/2 not-pointer-fine:after:size-12 not-pointer-fine:after:-translate-x-1/2 not-pointer-fine:after:-translate-y-1/2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-500',
   },
   variants: {
     hasStartAdornment: {
@@ -59,7 +65,24 @@ export function Input({
   )
 }
 
-export function InputAdornmentIcon(props: ComponentProps<typeof Icon>) {
+export function InputAdornmentIcon(
+  props: Omit<ComponentProps<typeof Icon>, 'className'>,
+) {
   const { adornmentIcon } = inputStyles()
   return <Icon {...props} className={adornmentIcon()} />
+}
+
+export function InputAdornmentButton({
+  iconName,
+  'aria-label': ariaLabel,
+}: {
+  iconName: IconName
+  'aria-label': string
+}) {
+  const { adornmentButton } = inputStyles()
+  return (
+    <button aria-label={ariaLabel} className={adornmentButton()}>
+      <InputAdornmentIcon name={iconName} />
+    </button>
+  )
 }
