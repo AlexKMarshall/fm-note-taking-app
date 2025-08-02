@@ -3,12 +3,12 @@ import { redirect } from 'react-router'
 import { type SubmissionResult } from '@conform-to/react'
 import { parseWithValibot } from '@conform-to/valibot'
 import { SignupSchema } from '../_lib/signup-schema'
-import { UserService } from '~/features/user/user-service'
+import { type IUserService } from '~/features/user/user-service'
 
 export function makeSignupAction({
   userService,
 }: {
-  userService: UserService
+  userService: IUserService
 }) {
   return async function signupAction(
     formData: FormData,
@@ -20,6 +20,18 @@ export function makeSignupAction({
     }
 
     try {
+      const isEmailUnique = await userService.isEmailUnique(
+        submission.value.email,
+      )
+
+      if (!isEmailUnique) {
+        return submission.reply({
+          fieldErrors: {
+            email: ['Email is already used'],
+          },
+        })
+      }
+
       await userService.signup(submission.value)
       // TODO: create a session for the user
       return redirect('/')

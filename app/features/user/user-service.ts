@@ -13,7 +13,19 @@ type SignupDto = {
   password: string
 }
 
-export class UserService {
+type VerifyPasswordDto = {
+  email: string
+  password: string
+}
+
+export interface IUserService {
+  signup(signupDto: SignupDto): Promise<User>
+  isEmailUnique(email: string): Promise<boolean>
+  getUserByEmail(email: string): Promise<User | null>
+  verifyPassword(verifyPasswordDto: VerifyPasswordDto): Promise<boolean>
+}
+
+export class UserService implements IUserService {
   constructor(private readonly userRepository: IUserRepository) {}
 
   async signup({ email, password }: SignupDto) {
@@ -28,13 +40,12 @@ export class UserService {
     return this.userRepository.get({ email })
   }
 
-  async verifyPassword({
-    email,
-    password,
-  }: {
-    email: string
-    password: string
-  }) {
+  async isEmailUnique(email: string) {
+    const user = await this.userRepository.get({ email })
+    return user === null
+  }
+
+  async verifyPassword({ email, password }: VerifyPasswordDto) {
     const passwordHash = await this.userRepository.getUserPasswordHash({
       email,
     })
