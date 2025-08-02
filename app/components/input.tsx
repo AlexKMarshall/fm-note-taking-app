@@ -74,14 +74,15 @@ export function InputAdornmentIcon(
 
 export function InputAdornmentButton({
   iconName,
-  'aria-label': ariaLabel,
+  ...buttonProps
 }: {
   iconName: IconName
-  'aria-label': string
-}) {
+} & Omit<ComponentProps<'button'>, 'aria-label' | 'className'> & {
+    'aria-label': string
+  }) {
   const { adornmentButton } = inputStyles()
   return (
-    <button aria-label={ariaLabel} className={adornmentButton()}>
+    <button {...buttonProps} className={adornmentButton()}>
       <InputAdornmentIcon name={iconName} />
     </button>
   )
