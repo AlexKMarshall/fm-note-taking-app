@@ -1,5 +1,5 @@
 import { type ComponentProps, useState } from 'react'
-import { Input, InputAdornmentButton } from './input'
+import { Input, InputAdornmentButton } from '../input'
 
 export function PasswordInput(props: Omit<ComponentProps<'input'>, 'type'>) {
   const [showPassword, setShowPassword] = useState(false)

@@ -10,7 +10,10 @@ import { FieldError } from '~/components/field-error'
 import { Input } from '~/components/input'
 import { Label } from '~/components/label'
 import { UserRepository, UserService } from '~/features/user/user-service'
-import { PasswordInput } from '~/components/password-input'
+import {
+  PasswordInput,
+  getPasswordInputProps,
+} from '~/components/password-input'
 
 export async function action({ request, context }: Route.ActionArgs) {
   const loginAction = makeLoginAction({
@@ -54,11 +57,7 @@ export default function Login() {
         <Field>
           <Label htmlFor={fields.password.id}>Password</Label>
           <PasswordInput
-            {...getInputProps(fields.password, {
-              // We have to do this because **we** control the type of the input in the PasswordInput component
-              // and we can't let Conform try to control it
-              type: undefined as unknown as 'text',
-            })}
+            {...getPasswordInputProps(fields.password)}
             autoComplete="current-password"
           />
           <FieldError
