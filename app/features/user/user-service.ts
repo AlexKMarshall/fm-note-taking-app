@@ -1,5 +1,6 @@
+import { eq } from 'drizzle-orm'
 import type { Database } from '~/database/index'
-import { hashPassword } from '~/utils/password'
+import { hashPassword } from '~/lib/password'
 import { users } from '~/database/schema'
 
 type User = {
@@ -22,6 +23,10 @@ export class UserService {
       password: { hash: passwordHash },
     })
   }
+
+  async getUserByEmail(email: string): Promise<User | null> {
+    return this.userRepository.get({ email })
+  }
 }
 
 export interface IUserRepository {
@@ -29,6 +34,8 @@ export interface IUserRepository {
     user: { email: string }
     password: { hash: string }
   }): Promise<User>
+
+  get(getDto: { id: number } | { email: string }): Promise<User | null>
 }
 
 export class UserRepository implements IUserRepository {
@@ -46,6 +53,22 @@ export class UserRepository implements IUserRepository {
       })
       .returning()
 
+    return user
+  }
+
+  async get(getDto: { id: number } | { email: string }): Promise<User | null> {
+    if ('id' in getDto) {
+      const [user] = await this.db
+        .select()
+        .from(users)
+        .where(eq(users.id, getDto.id))
+      return user
+    }
+
+    const [user] = await this.db
+      .select()
+      .from(users)
+      .where(eq(users.email, getDto.email))
     return user
   }
 }
