@@ -17,6 +17,7 @@ import { Input } from '~/components/input'
 import { Label } from '~/components/label'
 import { Stack } from '~/components/stack'
 import { UserRepository, UserService } from '~/features/user/user-service'
+import { PasswordInput } from '~/components/password-input'
 
 export async function action({
   request,
@@ -68,9 +69,11 @@ export default function Signup() {
         </Field>
         <Field>
           <Label htmlFor={fields.password.id}>Password</Label>
-          <Input
+          <PasswordInput
             {...getInputProps(fields.password, {
-              type: 'password',
+              // We have to do this because **we** control the type of the input in the PasswordInput component
+              // and we can't let Conform try to control it
+              type: undefined as unknown as 'text',
               // We only want to pass an additional description if the field doesn't have an error
               ariaDescribedBy: fields.password.errors
                 ? undefined
