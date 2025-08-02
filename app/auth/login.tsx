@@ -3,16 +3,20 @@ import { getFormProps, useForm, getInputProps } from '@conform-to/react'
 import { useActionData, Form, Link } from 'react-router'
 import type { Route } from './+types/login'
 import { LoginSchema } from './_lib/login-schema'
-import { loginAction } from './_actions/login-action'
+import { makeLoginAction } from './_actions/login-action'
 import { Stack } from '~/components/stack'
 import { Field } from '~/components/field'
 import { FieldError } from '~/components/field-error'
 import { Input } from '~/components/input'
 import { Label } from '~/components/label'
+import { UserRepository, UserService } from '~/features/user/user-service'
 
-export async function action({ request }: Route.ActionArgs) {
+export async function action({ request, context }: Route.ActionArgs) {
+  const loginAction = makeLoginAction({
+    userService: new UserService(new UserRepository(context.db)),
+  })
   const formData = await request.formData()
-  return loginAction(formData)
+  return loginAction({ formData, sessionStorage: context.sessionStorage })
 }
 
 export default function Login() {

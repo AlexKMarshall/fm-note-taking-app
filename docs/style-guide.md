@@ -75,6 +75,8 @@ const Button: React.FC<ButtonProps> = ({ children, onClick, disabled }) => {
 - Use `interface` for object shapes that may be extended
 - Prefer inline types for component props
 - Use `as const` for literal type arrays
+- Prefer inferring return types over explicit return types except in situations where typescript cannot correctly infer the return type
+- Prefer object function arguments over positional function arguments
 
 ```tsx
 // ✅ Good
@@ -95,6 +97,26 @@ export function UserCard({
   onEdit: (user: User) => void
 }) {
   // ...
+}
+
+// ❌ Avoid
+interface UserCardProps {
+  user: User
+  onEdit: (user: User) => void
+}
+
+export function UserCard({ user, onEdit }: UserCardProps) {
+  // ...
+}
+
+// ❌ Avoid
+export function isTooLong(value: string, maxLength: number): boolean {
+  return value.length > maxLength
+}
+
+// ✅ Good
+export function isTooLong(value: string, maxLength: number) {
+  return value.length > maxLength
 }
 ```
 

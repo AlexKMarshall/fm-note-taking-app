@@ -5,8 +5,9 @@ import {
 } from 'storybook-addon-remix-react-router'
 import { expect, userEvent, within, fn, waitFor } from 'storybook/test'
 
+import { parseWithValibot } from '@conform-to/valibot'
 import LoginRoute from './login'
-import { loginAction } from './_actions/login-action'
+import { LoginSchema } from './_lib/login-schema'
 
 const mockAction = fn()
 
@@ -70,8 +71,11 @@ export const InvalidSubmission = {
       routing: {
         action: async ({ request }: { request: Request }) => {
           const formData = await request.formData()
+          const submission = parseWithValibot(formData, {
+            schema: LoginSchema,
+          })
 
-          return loginAction(formData)
+          return submission.reply()
         },
       },
     }),

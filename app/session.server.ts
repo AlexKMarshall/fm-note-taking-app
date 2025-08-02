@@ -26,3 +26,5 @@ export function createSessionStorage(
     cookie: createSessionCookie(env),
   })
 }
+
+export type SessionStorage = ReturnType<typeof createSessionStorage>
