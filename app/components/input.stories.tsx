@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { userEvent, within } from 'storybook/test'
+import { expect, fn, userEvent, within } from 'storybook/test'
 
 import { Input, InputAdornmentButton, InputAdornmentIcon } from './input'
 
@@ -54,10 +54,22 @@ export const WithEndAdornment: Story = {
   },
 }
 
+const mockClickHandler = fn()
+mockClickHandler.mockName('mockClickHandler')
+
 export const WithEndAdornmentButton: Story = {
   args: {
     endAdornment: (
-      <InputAdornmentButton iconName="icon-search" aria-label="Search" />
+      <InputAdornmentButton
+        iconName="icon-search"
+        aria-label="Search"
+        onClick={mockClickHandler}
+      />
     ),
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    await userEvent.click(canvas.getByRole('button', { name: 'Search' }))
+    await expect(mockClickHandler).toHaveBeenCalledOnce()
   },
 }
