@@ -73,6 +73,10 @@ export class UserRepository implements IUserRepository {
       })
       .returning({ id: users.id, email: users.email })
 
+    if (!user) {
+      throw new Error('Failed to create user')
+    }
+
     return user
   }
 
@@ -82,14 +86,14 @@ export class UserRepository implements IUserRepository {
         .select({ id: users.id, email: users.email })
         .from(users)
         .where(eq(users.id, getDto.id))
-      return user
+      return user ?? null
     }
 
     const [user] = await this.db
       .select({ id: users.id, email: users.email })
       .from(users)
       .where(eq(users.email, getDto.email))
-    return user
+    return user ?? null
   }
 
   // TODO: this seems weird to get the password hash in a separate method,
