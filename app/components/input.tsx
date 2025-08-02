@@ -15,7 +15,7 @@ const inputStyles = tv({
       'pointer-events-none col-start-3 row-start-1 self-center pr-4',
     // Includes a 48x48px click target pseudo-element for coarse pointer users
     adornmentButton:
-      'pointer-events-auto relative block rounded not-pointer-fine:after:absolute not-pointer-fine:after:top-1/2 not-pointer-fine:after:left-1/2 not-pointer-fine:after:size-12 not-pointer-fine:after:-translate-x-1/2 not-pointer-fine:after:-translate-y-1/2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-500',
+      'pointer-events-auto relative block cursor-pointer rounded not-pointer-fine:after:absolute not-pointer-fine:after:top-1/2 not-pointer-fine:after:left-1/2 not-pointer-fine:after:size-12 not-pointer-fine:after:-translate-x-1/2 not-pointer-fine:after:-translate-y-1/2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-500',
   },
   variants: {
     hasStartAdornment: {
