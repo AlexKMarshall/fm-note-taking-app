@@ -77,12 +77,12 @@ export function InputAdornmentButton({
   ...buttonProps
 }: {
   iconName: IconName
-} & Omit<ComponentProps<'button'>, 'aria-label' | 'className'> & {
+} & Omit<ComponentProps<'button'>, 'aria-label' | 'className' | 'type'> & {
     'aria-label': string
   }) {
   const { adornmentButton } = inputStyles()
   return (
-    <button {...buttonProps} className={adornmentButton()}>
+    <button {...buttonProps} className={adornmentButton()} type="button">
       <InputAdornmentIcon name={iconName} />
     </button>
   )
