@@ -77,6 +77,7 @@ const Button: React.FC<ButtonProps> = ({ children, onClick, disabled }) => {
 - Use `as const` for literal type arrays
 - Prefer inferring return types over explicit return types except in situations where typescript cannot correctly infer the return type
 - Prefer object function arguments over positional function arguments
+- Type casting and type assertions should be avoided. If they are necessary, they must be commented with a justification.
 
 ```tsx
 // ✅ Good
