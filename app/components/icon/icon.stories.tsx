@@ -1,4 +1,4 @@
-import type { Meta } from '@storybook/react-vite'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 
 import { Icon } from './icon'
 import { iconNames } from './names'
@@ -10,6 +10,8 @@ const meta = {
 } satisfies Meta<typeof Icon>
 
 export default meta
+
+type Story = StoryObj<typeof meta>
 
 export const AllIcons = {
   render: function Render() {
@@ -26,5 +28,18 @@ export const AllIcons = {
         ))}
       </div>
     )
+  },
+}
+
+export const WithColor: Story = {
+  args: {
+    name: 'icon-archive',
+    className: 'text-red-500',
+  },
+  argTypes: {
+    name: {
+      control: 'select',
+      options: iconNames,
+    },
   },
 }

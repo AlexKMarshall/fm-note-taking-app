@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { userEvent, within } from 'storybook/test'
 
-import { Input } from './input'
+import { Input, InputAdornmentIcon } from './input'
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
@@ -39,5 +39,17 @@ export const Invalid: Story = {
   args: {
     defaultValue: 'invalid-email',
     'aria-invalid': true,
+  },
+}
+
+export const WithStartAdornment: Story = {
+  args: {
+    startAdornment: <InputAdornmentIcon name="icon-search" />,
+  },
+}
+
+export const WithEndAdornment: Story = {
+  args: {
+    endAdornment: <InputAdornmentIcon name="icon-search" />,
   },
 }
