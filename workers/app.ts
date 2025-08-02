@@ -1,7 +1,10 @@
 import { drizzle, type DrizzleD1Database } from 'drizzle-orm/d1'
 import { createRequestHandler } from 'react-router'
 import * as schema from '../database/schema'
-import { createSessionStorage } from '../app/session.server'
+import {
+  type SessionStorage,
+  createSessionStorage,
+} from '../app/session.server'
 import {
   validateEnvironment,
   type EnvironmentData,
@@ -14,7 +17,7 @@ declare module 'react-router' {
       ctx: ExecutionContext
     }
     db: DrizzleD1Database<typeof schema>
-    sessionStorage: ReturnType<typeof createSessionStorage>
+    sessionStorage: SessionStorage
   }
 }
 

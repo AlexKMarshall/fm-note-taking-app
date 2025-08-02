@@ -8,6 +8,8 @@ mockCreateUser.mockName('createUser')
 
 const mockUserRepository: IUserRepository = {
   create: mockCreateUser,
+  get: vi.fn(),
+  getUserPasswordHash: vi.fn(),
 }
 
 function makeSignupPayload({
