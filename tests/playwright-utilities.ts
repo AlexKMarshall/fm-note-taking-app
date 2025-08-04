@@ -47,14 +47,14 @@ export const test = testBase.extend<TestFixtures, WorkerFixtures>({
     { scope: 'worker' },
   ],
   authStatus: 'authenticated',
-  page: async ({ authStatus, page }, use) => {
+  page: async ({ authStatus, page, signupUser }, use) => {
     if (authStatus === 'authenticated') {
-      // TODO: actually create a user in the database and use that id to create a session cookie
-      // We'll create a mock session cookie and save it to the page
+      const user = await signupUser()
+
       const sessionCookie = createSessionCookie(validatedTestEnvironment)
 
       const cookieHeader = await sessionCookie.serialize({
-        userId: 123,
+        userId: user.id,
       })
 
       await page.context().addCookies([
