@@ -1,10 +1,12 @@
 /* eslint-disable react-hooks/rules-of-hooks */ // This isn't a react component file, rules of hooks don't apply here
 import { test as testBase } from '@playwright/test'
+import { faker } from '@faker-js/faker'
 import setCookieParser from 'set-cookie-parser'
 import { type PlatformProxy, getPlatformProxy } from 'wrangler'
 import { createSessionCookie } from '../app/session.server'
-import { getDatabase, type Database } from '../database'
+import { type Database, getDatabase } from '../database'
 import { validatedTestEnvironment } from './test-environment'
+import { UserRepository, UserService } from '~/features/user/user-service'
 
 type TestFixtures = {
   /** Is the test user authenticated?
@@ -12,6 +14,13 @@ type TestFixtures = {
    * @default 'authenticated'
    */
   authStatus: 'authenticated' | 'unauthenticated'
+  /**
+   * Register a user that can be used in the test
+   *
+   */
+  signupUser: (
+    userOverrides?: Partial<{ email: string; password: string }>,
+  ) => Promise<{ id: number; email: string; password: string }>
 }
 
 type WorkerFixtures = {
@@ -58,6 +67,18 @@ export const test = testBase.extend<TestFixtures, WorkerFixtures>({
     }
 
     await use(page)
+  },
+  signupUser: async ({ db }, use) => {
+    const userService = new UserService(new UserRepository(db))
+    await use(async (userOverrides) => {
+      const user = {
+        email: faker.internet.email(),
+        password: faker.internet.password(),
+        ...userOverrides,
+      }
+      const savedUser = await userService.signup(user)
+      return { ...savedUser, password: user.password }
+    })
   },
 })
 

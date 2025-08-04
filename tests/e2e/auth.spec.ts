@@ -1,6 +1,4 @@
-import { faker } from '@faker-js/faker'
 import { expect, test } from '../playwright-utilities'
-import { UserRepository, UserService } from '~/features/user/user-service'
 
 test.describe('unauthenticated user', () => {
   test.use({ authStatus: 'unauthenticated' })
@@ -16,14 +14,8 @@ test.describe('unauthenticated user', () => {
     await expect(page.url()).toContain('/login')
   })
 
-  test('login with valid credentials', async ({ page, db }) => {
-    const userService = new UserService(new UserRepository(db))
-    const user = {
-      email: faker.internet.email(),
-      password: faker.internet.password(),
-    }
-
-    await userService.signup(user)
+  test('login with valid credentials', async ({ page, signupUser }) => {
+    const user = await signupUser()
 
     await page.goto('/login')
 
@@ -38,14 +30,8 @@ test.describe('unauthenticated user', () => {
     ).toBeVisible()
   })
 
-  test('login with incorrect password', async ({ page, db }) => {
-    const userService = new UserService(new UserRepository(db))
-    const user = {
-      email: faker.internet.email(),
-      password: faker.internet.password(),
-    }
-
-    await userService.signup(user)
+  test('login with incorrect password', async ({ page, signupUser }) => {
+    const user = await signupUser()
 
     await page.goto('/login')
 
@@ -57,14 +43,8 @@ test.describe('unauthenticated user', () => {
     await expect(page.getByText('Invalid email or password')).toBeVisible()
   })
 
-  test('login with incorrect email', async ({ page, db }) => {
-    const userService = new UserService(new UserRepository(db))
-    const user = {
-      email: faker.internet.email(),
-      password: faker.internet.password(),
-    }
-
-    await userService.signup(user)
+  test('login with incorrect email', async ({ page, signupUser }) => {
+    const user = await signupUser()
 
     await page.goto('/login')
     await page.getByLabel('Email').fill('incorrect@example.com')
