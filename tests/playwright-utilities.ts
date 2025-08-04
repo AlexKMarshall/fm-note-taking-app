@@ -3,6 +3,7 @@ import { test as testBase } from '@playwright/test'
 import setCookieParser from 'set-cookie-parser'
 import { type PlatformProxy, getPlatformProxy } from 'wrangler'
 import { createSessionCookie } from '../app/session.server'
+import { getDatabase, type Database } from '../database'
 import { validatedTestEnvironment } from './test-environment'
 
 type TestFixtures = {
@@ -15,6 +16,7 @@ type TestFixtures = {
 
 type WorkerFixtures = {
   wrangler: PlatformProxy<Env>
+  db: Database
 }
 
 export const test = testBase.extend<TestFixtures, WorkerFixtures>({
@@ -27,6 +29,13 @@ export const test = testBase.extend<TestFixtures, WorkerFixtures>({
       await wrangler.dispose()
     },
     { scope: 'worker', auto: true },
+  ],
+  db: [
+    async ({ wrangler }, use) => {
+      const db = getDatabase(wrangler.env.DB)
+      await use(db)
+    },
+    { scope: 'worker' },
   ],
   authStatus: 'authenticated',
   page: async ({ authStatus, page }, use) => {
