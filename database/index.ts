@@ -3,6 +3,11 @@ import * as schema from './schema'
 
 export type Database = DrizzleD1Database<typeof schema>
 
+let databaseSingleton: Database | null = null
+
 export function getDatabase(db: D1Database) {
-  return drizzle(db, { schema })
+  if (!databaseSingleton) {
+    databaseSingleton = drizzle(db, { schema })
+  }
+  return databaseSingleton
 }
