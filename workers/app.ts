@@ -1,22 +1,22 @@
-import { drizzle, type DrizzleD1Database } from 'drizzle-orm/d1'
 import { createRequestHandler } from 'react-router'
-import * as schema from '../database/schema'
-import {
-  type SessionStorage,
-  createSessionStorage,
-} from '../app/session.server'
 import {
   validateEnvironment,
   type EnvironmentData,
 } from '../app/environment.server'
+import {
+  createSessionStorage,
+  type SessionStorage,
+} from '../app/session.server'
+import { getDatabase, type Database } from '../database'
 
 declare module 'react-router' {
   export interface AppLoadContext {
     cloudflare: {
-      env: EnvironmentData
+      env: Env
       ctx: ExecutionContext
     }
-    db: DrizzleD1Database<typeof schema>
+    db: Database
+    environment: EnvironmentData
     sessionStorage: SessionStorage
   }
 }
@@ -28,13 +28,14 @@ const requestHandler = createRequestHandler(
 
 export default {
   async fetch(request, env, ctx) {
-    const db = drizzle(env.DB, { schema })
+    const db = getDatabase(env.DB)
     const validatedEnvironment = validateEnvironment(env)
     const sessionStorage = createSessionStorage(validatedEnvironment)
 
     return requestHandler(request, {
-      cloudflare: { env: validatedEnvironment, ctx },
+      cloudflare: { env, ctx },
       db,
+      environment: validatedEnvironment,
       sessionStorage,
     })
   },

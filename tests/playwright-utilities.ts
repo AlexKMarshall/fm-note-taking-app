@@ -1,10 +1,12 @@
 /* eslint-disable react-hooks/rules-of-hooks */ // This isn't a react component file, rules of hooks don't apply here
 import { test as testBase } from '@playwright/test'
 import setCookieParser from 'set-cookie-parser'
+import { type PlatformProxy, getPlatformProxy } from 'wrangler'
 import { createSessionCookie } from '../app/session.server'
+import { getDatabase, type Database } from '../database'
 import { validatedTestEnvironment } from './test-environment'
 
-type TestOptions = {
+type TestFixtures = {
   /** Is the test user authenticated?
    *
    * @default 'authenticated'
@@ -12,7 +14,29 @@ type TestOptions = {
   authStatus: 'authenticated' | 'unauthenticated'
 }
 
-export const test = testBase.extend<TestOptions>({
+type WorkerFixtures = {
+  wrangler: PlatformProxy<Env>
+  db: Database
+}
+
+export const test = testBase.extend<TestFixtures, WorkerFixtures>({
+  wrangler: [
+    async ({}, use) => {
+      const wrangler = await getPlatformProxy<Env>()
+
+      await use(wrangler)
+
+      await wrangler.dispose()
+    },
+    { scope: 'worker', auto: true },
+  ],
+  db: [
+    async ({ wrangler }, use) => {
+      const db = getDatabase(wrangler.env.DB)
+      await use(db)
+    },
+    { scope: 'worker' },
+  ],
   authStatus: 'authenticated',
   page: async ({ authStatus, page }, use) => {
     if (authStatus === 'authenticated') {

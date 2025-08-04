@@ -1,4 +1,4 @@
-import { test, expect } from '../playwright-utilities'
+import { expect, test } from '../playwright-utilities'
 
 test.describe('unauthenticated user', () => {
   test.use({ authStatus: 'unauthenticated' })
