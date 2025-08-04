@@ -13,7 +13,7 @@ import {
 declare module 'react-router' {
   export interface AppLoadContext {
     cloudflare: {
-      env: EnvironmentData
+      env: Env
       ctx: ExecutionContext
     }
     db: DrizzleD1Database<typeof schema>
@@ -33,8 +33,9 @@ export default {
     const sessionStorage = createSessionStorage(validatedEnvironment)
 
     return requestHandler(request, {
-      cloudflare: { env: validatedEnvironment, ctx },
+      cloudflare: { env, ctx },
       db,
+      environment: validatedEnvironment,
       sessionStorage,
     })
   },
