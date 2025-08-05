@@ -6,6 +6,8 @@ import { type PlatformProxy, getPlatformProxy } from 'wrangler'
 import { createSessionCookie } from '../app/session.server'
 import { type Database, getDatabase } from '../database'
 import { validatedTestEnvironment } from './test-environment'
+import { SignupPageObjectModel } from './object-models/signup-page'
+import { LoginPageObjectModel } from './object-models/login-page'
 import { UserRepository, UserService } from '~/features/user/user-service'
 
 type TestFixtures = {
@@ -15,12 +17,21 @@ type TestFixtures = {
    */
   authStatus: 'authenticated' | 'unauthenticated'
   /**
-   * Register a user that can be used in the test
+   * Generate a user that can be used in the test
+   */
+  makeUser: (userOverrides?: Partial<{ email: string; password: string }>) => {
+    email: string
+    password: string
+  }
+  /**
+   * Sign up a user that can be used in the test
    *
    */
   signupUser: (
     userOverrides?: Partial<{ email: string; password: string }>,
   ) => Promise<{ id: number; email: string; password: string }>
+  signupPage: SignupPageObjectModel
+  loginPage: LoginPageObjectModel
 }
 
 type WorkerFixtures = {
@@ -68,17 +79,28 @@ export const test = testBase.extend<TestFixtures, WorkerFixtures>({
 
     await use(page)
   },
-  signupUser: async ({ db }, use) => {
-    const userService = new UserService(new UserRepository(db))
-    await use(async (userOverrides) => {
-      const user = {
+  makeUser: async ({}, use) => {
+    await use((userOverrides) => {
+      return {
         email: faker.internet.email(),
         password: faker.internet.password(),
         ...userOverrides,
       }
+    })
+  },
+  signupUser: async ({ db, makeUser }, use) => {
+    const userService = new UserService(new UserRepository(db))
+    await use(async (userOverrides) => {
+      const user = makeUser(userOverrides)
       const savedUser = await userService.signup(user)
       return { ...savedUser, password: user.password }
     })
+  },
+  signupPage: async ({ page }, use) => {
+    await use(new SignupPageObjectModel(page))
+  },
+  loginPage: async ({ page }, use) => {
+    await use(new LoginPageObjectModel(page))
   },
 })
 
