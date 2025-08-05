@@ -32,7 +32,10 @@ export async function action({
     userService: new UserService(new UserRepository(context.db)),
   })
 
-  return signupAction(formData)
+  return signupAction({
+    formData,
+    sessionStorage: context.sessionStorage,
+  })
 }
 
 export default function Signup() {

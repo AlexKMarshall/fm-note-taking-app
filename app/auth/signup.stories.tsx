@@ -8,6 +8,7 @@ import { expect, userEvent, within, fn, waitFor } from 'storybook/test'
 import SignupRoute from './signup'
 import { makeSignupAction } from './_actions/signup-action'
 import { UserService } from '~/features/user/user-service'
+import { createSessionStorage } from '~/session.server'
 
 const mockAction = fn()
 
@@ -126,7 +127,13 @@ export const DatabaseError = {
             }),
           })
           const formData = await request.formData()
-          return signupActionWithDatabaseError(formData)
+          return signupActionWithDatabaseError({
+            formData,
+            sessionStorage: createSessionStorage({
+              SESSION_SECRET: 'test',
+              ENVIRONMENT: 'test',
+            }),
+          })
         },
       },
     }),
