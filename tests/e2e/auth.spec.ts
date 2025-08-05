@@ -38,43 +38,45 @@ test.describe('unauthenticated user', () => {
     await expect(page.getByText('Email is already used')).toBeVisible()
   })
 
-  test('login with valid credentials', async ({ page, signupUser }) => {
+  test('login with valid credentials', async ({
+    page,
+    signupUser,
+    loginPage,
+  }) => {
     const user = await signupUser()
 
-    await page.goto('/login')
+    await loginPage.goto()
 
-    await page.getByLabel('Email').fill(user.email)
-    // Use an exact match to avoid matching with the 'Show password' button
-    await page.getByLabel('Password', { exact: true }).fill(user.password)
-
-    await page.getByRole('button', { name: 'Login' }).click()
+    await loginPage.login(user)
 
     await expect(
       page.getByRole('heading', { name: 'Welcome to the Home Page' }),
     ).toBeVisible()
   })
 
-  test('login with incorrect password', async ({ page, signupUser }) => {
+  test('login with incorrect password', async ({
+    page,
+    signupUser,
+    loginPage,
+  }) => {
     const user = await signupUser()
 
-    await page.goto('/login')
+    await loginPage.goto()
 
-    await page.getByLabel('Email').fill(user.email)
-    await page.getByLabel('Password', { exact: true }).fill('incorrect')
-
-    await page.getByRole('button', { name: 'Login' }).click()
+    await loginPage.login({ ...user, password: 'incorrect' })
 
     await expect(page.getByText('Invalid email or password')).toBeVisible()
   })
 
-  test('login with incorrect email', async ({ page, signupUser }) => {
+  test('login with incorrect email', async ({
+    page,
+    signupUser,
+    loginPage,
+  }) => {
     const user = await signupUser()
 
-    await page.goto('/login')
-    await page.getByLabel('Email').fill('incorrect@example.com')
-    await page.getByLabel('Password', { exact: true }).fill(user.password)
-
-    await page.getByRole('button', { name: 'Login' }).click()
+    await loginPage.goto()
+    await loginPage.login({ ...user, email: 'incorrect@example.com' })
 
     await expect(page.getByText('Invalid email or password')).toBeVisible()
   })

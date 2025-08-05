@@ -7,6 +7,7 @@ import { createSessionCookie } from '../app/session.server'
 import { type Database, getDatabase } from '../database'
 import { validatedTestEnvironment } from './test-environment'
 import { SignupPageObjectModel } from './object-models/signup-page'
+import { LoginPageObjectModel } from './object-models/login-page'
 import { UserRepository, UserService } from '~/features/user/user-service'
 
 type TestFixtures = {
@@ -30,6 +31,7 @@ type TestFixtures = {
     userOverrides?: Partial<{ email: string; password: string }>,
   ) => Promise<{ id: number; email: string; password: string }>
   signupPage: SignupPageObjectModel
+  loginPage: LoginPageObjectModel
 }
 
 type WorkerFixtures = {
@@ -96,6 +98,9 @@ export const test = testBase.extend<TestFixtures, WorkerFixtures>({
   },
   signupPage: async ({ page }, use) => {
     await use(new SignupPageObjectModel(page))
+  },
+  loginPage: async ({ page }, use) => {
+    await use(new LoginPageObjectModel(page))
   },
 })
 
