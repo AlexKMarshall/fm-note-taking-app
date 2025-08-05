@@ -18,7 +18,7 @@ Visual tests should also check for accessibility concerns, for instance that for
 ### Component interaction tests
 
 These can be built using Storybook play functions, or using vitest browser mode. If there are many variations of particular interactions, then it may be better to use vitest browser mode to avoid cluttering up the storybook ui. Particularly if the end visual state of the component is not relevant to the test or is the same for multiple variations.
-Some components may need to interact with the React Router framework. For instance, a <Form> component may trigger a route action or a redirect navigation. In those cases you may need to create a stub test environment with mock actions. Or those tests could be written as end to end tests instead.
+Some components may need to interact with the React Router framework. For instance, a `<Form>` component may trigger a route action or a redirect navigation. In those cases you may need to create a stub test environment with mock actions. Or those tests could be written as end to end tests instead.
 When we migrate to React Server Components and server functions, it may be possible for a form to receive an action prop, and then pass a mock action to the form to simplify writing these kinds of tests.
 
 ### End to end tests
