@@ -6,8 +6,12 @@ import {
   type IUserRepository,
   type IUserService,
 } from '~/features/user/user-service'
+import { createSessionStorage } from '~/session.server'
 
-const mockCreateUser = vi.fn()
+const mockCreateUser = vi.fn(async () => ({
+  id: 1,
+  email: 'test@example.com',
+}))
 mockCreateUser.mockName('createUser')
 
 const mockUserRepository: IUserRepository = {
@@ -48,6 +52,10 @@ function makeSignupFormData({
 }
 
 test('valid form data redirects to homepage', async () => {
+  const mockSessionStorage = createSessionStorage({
+    SESSION_SECRET: 'test',
+    ENVIRONMENT: 'test',
+  })
   const signupAction = makeSignupAction({
     userService: new UserService({
       ...mockUserRepository,
@@ -57,7 +65,10 @@ test('valid form data redirects to homepage', async () => {
   const payload = makeSignupPayload()
   const formData = makeSignupFormData(payload)
 
-  const result = await signupAction(formData)
+  const result = await signupAction({
+    formData,
+    sessionStorage: mockSessionStorage,
+  })
 
   assert(result instanceof Response, 'Expected a response')
 
@@ -71,12 +82,19 @@ test('valid form data redirects to homepage', async () => {
 })
 
 test('invalid form data', async () => {
+  const mockSessionStorage = createSessionStorage({
+    SESSION_SECRET: 'test',
+    ENVIRONMENT: 'test',
+  })
   const signupAction = makeSignupAction({
     userService: new UserService(mockUserRepository),
   })
   const formData = makeSignupFormData({ email: '' })
 
-  const result = await signupAction(formData)
+  const result = await signupAction({
+    formData,
+    sessionStorage: mockSessionStorage,
+  })
 
   expect.soft(result).toEqual(
     expect.objectContaining({
@@ -87,12 +105,19 @@ test('invalid form data', async () => {
 })
 
 test('email is already used', async () => {
+  const mockSessionStorage = createSessionStorage({
+    SESSION_SECRET: 'test',
+    ENVIRONMENT: 'test',
+  })
   const signupAction = makeSignupAction({
     userService: { ...mockUserService, isEmailUnique: async () => false },
   })
   const formData = makeSignupFormData({ email: 'test@example.com' })
 
-  const result = await signupAction(formData)
+  const result = await signupAction({
+    formData,
+    sessionStorage: mockSessionStorage,
+  })
   expect.soft(result).toEqual(
     expect.objectContaining({
       status: 'error',
