@@ -1,10 +1,12 @@
 /* eslint-disable react-hooks/rules-of-hooks */ // This isn't a react component file, rules of hooks don't apply here
 import { test as testBase } from '@playwright/test'
+import { faker } from '@faker-js/faker'
 import setCookieParser from 'set-cookie-parser'
 import { type PlatformProxy, getPlatformProxy } from 'wrangler'
 import { createSessionCookie } from '../app/session.server'
-import { getDatabase, type Database } from '../database'
+import { type Database, getDatabase } from '../database'
 import { validatedTestEnvironment } from './test-environment'
+import { UserRepository, UserService } from '~/features/user/user-service'
 
 type TestFixtures = {
   /** Is the test user authenticated?
@@ -12,6 +14,13 @@ type TestFixtures = {
    * @default 'authenticated'
    */
   authStatus: 'authenticated' | 'unauthenticated'
+  /**
+   * Register a user that can be used in the test
+   *
+   */
+  signupUser: (
+    userOverrides?: Partial<{ email: string; password: string }>,
+  ) => Promise<{ id: number; email: string; password: string }>
 }
 
 type WorkerFixtures = {
@@ -38,14 +47,14 @@ export const test = testBase.extend<TestFixtures, WorkerFixtures>({
     { scope: 'worker' },
   ],
   authStatus: 'authenticated',
-  page: async ({ authStatus, page }, use) => {
+  page: async ({ authStatus, page, signupUser }, use) => {
     if (authStatus === 'authenticated') {
-      // TODO: actually create a user in the database and use that id to create a session cookie
-      // We'll create a mock session cookie and save it to the page
+      const user = await signupUser()
+
       const sessionCookie = createSessionCookie(validatedTestEnvironment)
 
       const cookieHeader = await sessionCookie.serialize({
-        userId: 123,
+        userId: user.id,
       })
 
       await page.context().addCookies([
@@ -58,6 +67,18 @@ export const test = testBase.extend<TestFixtures, WorkerFixtures>({
     }
 
     await use(page)
+  },
+  signupUser: async ({ db }, use) => {
+    const userService = new UserService(new UserRepository(db))
+    await use(async (userOverrides) => {
+      const user = {
+        email: faker.internet.email(),
+        password: faker.internet.password(),
+        ...userOverrides,
+      }
+      const savedUser = await userService.signup(user)
+      return { ...savedUser, password: user.password }
+    })
   },
 })
 
