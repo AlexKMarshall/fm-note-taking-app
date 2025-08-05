@@ -27,7 +27,10 @@ export function Stack({
   align?: string
 }) {
   return (
-    <div {...props} className={mergeTailwindClasses([gap, align, className])} />
+    <div
+      {...props}
+      className={mergeTailwindClasses(['flex flex-col', gap, align, className])}
+    />
   )
 }
 
