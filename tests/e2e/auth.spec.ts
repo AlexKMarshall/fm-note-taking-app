@@ -25,6 +25,19 @@ test.describe('unauthenticated user', () => {
     ).toBeVisible()
   })
 
+  test('attempt signup with used email', async ({
+    page,
+    signupUser,
+    signupPage,
+  }) => {
+    const user = await signupUser()
+
+    await signupPage.goto()
+    await signupPage.signup(user)
+
+    await expect(page.getByText('Email is already used')).toBeVisible()
+  })
+
   test('login with valid credentials', async ({ page, signupUser }) => {
     const user = await signupUser()
 
