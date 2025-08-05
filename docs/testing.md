@@ -26,3 +26,19 @@ When we migrate to React Server Components and server functions, it may be possi
 These test the full application including the server and database. All major workflows should have their happy path tested in an end to end test. Significant error paths should also be tested. End to end tests are slow though, so they should not be used to comprehensively test all error conditions, these should be covered by lower level tests.
 Every test should use its own unique user to avoid tests sharing state.
 It may be possible in future to use a new database for every test, but right now we're using a single database file and we can't create multiple database clients against it, so tests cannot run in parallel.
+
+## Test fixtures
+
+You can destructure test fixtures from the playwright function
+
+```ts
+test('test with fixtures', async ({ makeUser, signupUser }) => {
+  const user = makeUser()
+  const savedUser = await signupUser(user)
+})
+```
+
+- `makeUser` - generate a user that can be used for a test
+- `signupUser` - sign up a user that can be used for a test. It saves them to the database and this user can be used to log in
+- `signupPage` - a page object model for the signup page
+- `loginPage` - a page object model for the login page
