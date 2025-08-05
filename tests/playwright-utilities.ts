@@ -6,6 +6,7 @@ import { type PlatformProxy, getPlatformProxy } from 'wrangler'
 import { createSessionCookie } from '../app/session.server'
 import { type Database, getDatabase } from '../database'
 import { validatedTestEnvironment } from './test-environment'
+import { SignupPageObjectModel } from './object-models/signup-page'
 import { UserRepository, UserService } from '~/features/user/user-service'
 
 type TestFixtures = {
@@ -28,6 +29,7 @@ type TestFixtures = {
   signupUser: (
     userOverrides?: Partial<{ email: string; password: string }>,
   ) => Promise<{ id: number; email: string; password: string }>
+  signupPage: SignupPageObjectModel
 }
 
 type WorkerFixtures = {
@@ -91,6 +93,9 @@ export const test = testBase.extend<TestFixtures, WorkerFixtures>({
       const savedUser = await userService.signup(user)
       return { ...savedUser, password: user.password }
     })
+  },
+  signupPage: async ({ page }, use) => {
+    await use(new SignupPageObjectModel(page))
   },
 })
 

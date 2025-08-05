@@ -14,15 +14,11 @@ test.describe('unauthenticated user', () => {
     await expect(page.url()).toContain('/login')
   })
 
-  test('signup with unused email', async ({ page, makeUser }) => {
+  test('signup with unused email', async ({ page, makeUser, signupPage }) => {
     const user = makeUser()
 
-    await page.goto('/signup')
-
-    await page.getByLabel('Email').fill(user.email)
-    await page.getByLabel('Password', { exact: true }).fill(user.password)
-
-    await page.getByRole('button', { name: 'Sign Up' }).click()
+    await signupPage.goto()
+    await signupPage.signup(user)
 
     await expect(
       page.getByRole('heading', { name: 'Welcome to the Home Page' }),
