@@ -141,35 +141,13 @@ import { type User } from './types'
 ### Tailwind CSS
 
 - Use Tailwind CSS for styling
-- Use `tailwind-variants` for component variants
 - Prefer utility classes over custom CSS
-- Use semantic class names and avoid arbitrary values
-
-```tsx
-// ✅ Good - using tailwind-variants
-const buttonStyles = tv({
-  base: 'rounded-lg px-4 py-2 font-medium',
-  variants: {
-    variant: {
-      primary: 'bg-blue-500 text-white hover:bg-blue-600',
-      secondary: 'bg-gray-200 text-gray-900 hover:bg-gray-300',
-    },
-    size: {
-      sm: 'px-3 py-1 text-sm',
-      md: 'px-4 py-2',
-      lg: 'px-6 py-3 text-lg',
-    },
-  },
-  defaultVariants: {
-    variant: 'primary',
-    size: 'md',
-  },
-})
-```
+- Where possible encapsulate re-usable styles in components. Allow for pragmatic overrides using tailwind classnames to achieve responsive variants, or to inject styles from a parent, such as margin, grid positioning etc
+- One off styling for pages and bespoke items can be done with bare tailwind, not every single element needs to be its own component
 
 ### CSS Classes
 
-- Use consistent spacing and sizing
+- Use consistent spacing and sizing, avoid arbitrary values unless completely necessary, and comment the reasoning behind the value
 - Prefer semantic color names (gray-500, blue-600)
 - Use focus-visible for keyboard navigation
 - Include proper hover and focus states
