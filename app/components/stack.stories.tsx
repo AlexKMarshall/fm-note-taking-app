@@ -14,18 +14,8 @@ const meta = {
         <div>Item 3</div>
       </>
     ),
-    gap: '4',
-    align: 'stretch',
-  },
-  argTypes: {
-    gap: {
-      control: 'select',
-      options: ['1.5', '2', '4'],
-    },
-    align: {
-      control: 'select',
-      options: ['start', 'center', 'end', 'stretch'],
-    },
+    gap: 'gap-4',
+    align: 'items-stretch',
   },
   tags: ['autodocs'],
 } satisfies Meta<typeof Stack>
@@ -37,7 +27,6 @@ export const Default: Story = {}
 
 export const ResponsiveGaps: Story = {
   args: {
-    gap: '2',
-    modifiedGaps: ['md:gap-4', 'lg:gap-12'],
+    gap: 'gap-2 md:gap-4 lg:gap-12',
   },
 }

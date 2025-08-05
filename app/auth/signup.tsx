@@ -51,7 +51,7 @@ export default function Signup() {
 
   return (
     <>
-      <Stack align="center" gap="2" className="text-center">
+      <Stack align="items-center" gap="gap-2" className="text-center">
         <h1 className="text-2xl font-bold text-gray-950">
           Create Your Account
         </h1>
@@ -92,7 +92,7 @@ export default function Signup() {
             id={fields.password.errorId}
           />
         </Field>
-        <Stack gap="2">
+        <Stack gap="gap-2">
           <button
             type="submit"
             className="cursor-pointer rounded-lg bg-blue-500 px-4 py-3 text-white hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-gray-400"

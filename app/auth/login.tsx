@@ -36,7 +36,7 @@ export default function Login() {
 
   return (
     <>
-      <Stack align="center" gap="2" className="text-center">
+      <Stack align="items-center" gap="gap-2" className="text-center">
         <h1 className="text-2xl font-bold text-gray-950">Welcome to Note</h1>
         <p className="text-sm text-gray-600">Please log in to continue</p>
       </Stack>
@@ -65,7 +65,7 @@ export default function Login() {
             id={fields.password.errorId}
           />
         </Field>
-        <Stack gap="2">
+        <Stack gap="gap-2">
           <button
             type="submit"
             className="cursor-pointer rounded-lg bg-blue-500 px-4 py-3 text-white hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-gray-400"
