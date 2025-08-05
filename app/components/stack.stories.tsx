@@ -34,3 +34,10 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const Default: Story = {}
+
+export const ResponsiveGaps: Story = {
+  args: {
+    gap: '2',
+    modifiedGaps: ['md:gap-4', 'lg:gap-12'],
+  },
+}

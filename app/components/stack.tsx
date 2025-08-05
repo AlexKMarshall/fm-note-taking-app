@@ -25,11 +25,33 @@ const stackStyles = tv({
 
 type StackVariants = SetRequired<VariantProps<typeof stackStyles>, 'gap'>
 
+type Gap = `gap-${number}`
+type ModifiedGap = `${string}:${Gap}`
+type ModifiedGaps = Array<ModifiedGap>
+
 export function Stack({
   gap,
   align,
   className,
+  modifiedGaps,
   ...props
-}: ComponentProps<'div'> & StackVariants) {
-  return <div {...props} className={stackStyles({ gap, align, className })} />
+}: ComponentProps<'div'> &
+  StackVariants & {
+    /**
+     * Use this to modify the gap under certain conditions. E.g. to increase the gap size on larger screens.
+     *
+     * @example <Flex gap="gap-3" modifiedGaps={['md:gap-4', 'lg:gap-5']} />
+     */
+    modifiedGaps?: ModifiedGaps
+  }) {
+  return (
+    <div
+      {...props}
+      className={stackStyles({
+        gap,
+        align,
+        className: [modifiedGaps, className],
+      })}
+    />
+  )
 }
