@@ -14,6 +14,7 @@ export default [
   ]),
   ...prefix('notes', [
     index('./notes/home.tsx'),
+    route('new', './notes/new.tsx'),
     route(':id', './notes/note.tsx'),
   ]),
 ] satisfies RouteConfig
