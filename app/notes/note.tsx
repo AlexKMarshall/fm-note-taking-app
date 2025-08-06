@@ -1,4 +1,15 @@
+import type { Route } from './+types/note'
+import { requireAuthenticatedUser } from '~/lib/require-authenticated-user.server'
 import { Note } from '~/features/note/note'
+
+export async function loader({ context, request }: Route.LoaderArgs) {
+  await requireAuthenticatedUser({
+    request,
+    sessionStorage: context.sessionStorage,
+  })
+
+  return null
+}
 
 export default function NoteRoute() {
   return (

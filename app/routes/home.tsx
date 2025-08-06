@@ -1,20 +1,12 @@
-import { redirect } from 'react-router'
 import type { Route } from './+types/home'
+import { requireAuthenticatedUser } from '~/lib/require-authenticated-user.server'
 
 export async function loader({ context, request }: Route.LoaderArgs) {
-  const session = await context.sessionStorage.getSession(
-    request.headers.get('Cookie'),
-  )
+  const { userId } = await requireAuthenticatedUser({
+    request,
+    sessionStorage: context.sessionStorage,
+  })
 
-  // Check if user is authenticated
-  const userId = session.get('userId')
-
-  if (!userId) {
-    // No session found, redirect to login
-    throw redirect('/login')
-  }
-
-  // User is authenticated, return user data or whatever you need
   return { userId }
 }
 
