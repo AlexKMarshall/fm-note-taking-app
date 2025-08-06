@@ -56,7 +56,9 @@ export const notesToTags = sqliteTable('notesToTags', {
   tagId: integer()
     .references(() => tags.id)
     .notNull(),
-})
+}, (table) => ({
+  pk: primaryKey({ columns: [table.noteId, table.tagId] }),
+}))
 
 export const notesToTagsRelations = relations(notesToTags, ({ one }) => ({
   note: one(notes, {
