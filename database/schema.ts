@@ -1,5 +1,5 @@
 import { relations, sql } from 'drizzle-orm'
-import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core'
+import { integer, sqliteTable, text, primaryKey } from 'drizzle-orm/sqlite-core'
 
 export const guestBook = sqliteTable('guestBook', {
   id: integer().primaryKey({ autoIncrement: true }),
@@ -49,16 +49,20 @@ export const tagsRelations = relations(tags, ({ many }) => ({
   notesToTags: many(notesToTags),
 }))
 
-export const notesToTags = sqliteTable('notesToTags', {
-  noteId: integer()
-    .references(() => notes.id)
-    .notNull(),
-  tagId: integer()
-    .references(() => tags.id)
-    .notNull(),
-}, (table) => ({
-  pk: primaryKey({ columns: [table.noteId, table.tagId] }),
-}))
+export const notesToTags = sqliteTable(
+  'notesToTags',
+  {
+    noteId: integer()
+      .references(() => notes.id)
+      .notNull(),
+    tagId: integer()
+      .references(() => tags.id)
+      .notNull(),
+  },
+  (table) => ({
+    pk: primaryKey({ columns: [table.noteId, table.tagId] }),
+  }),
+)
 
 export const notesToTagsRelations = relations(notesToTags, ({ one }) => ({
   note: one(notes, {
