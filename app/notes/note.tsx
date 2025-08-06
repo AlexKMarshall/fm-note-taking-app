@@ -1,18 +1,18 @@
-import { eq } from 'drizzle-orm'
+import { eq, and } from 'drizzle-orm'
 import { redirect } from 'react-router'
 import type { Route } from './+types/note'
 import { requireAuthenticatedUser } from '~/lib/require-authenticated-user.server'
 import { Note } from '~/features/note/note'
 import { notes } from '~/database/schema'
 
-export async function loader({ context, request }: Route.LoaderArgs) {
+export async function loader({ context, request, params }: Route.LoaderArgs) {
   const { userId } = await requireAuthenticatedUser({
     request,
     sessionStorage: context.sessionStorage,
   })
 
   const note = await context.db.query.notes.findFirst({
-    where: eq(notes.authorId, userId),
+    where: and(eq(notes.authorId, userId), eq(notes.id, Number(params.id))),
     columns: {
       id: true,
       title: true,
