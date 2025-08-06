@@ -11,11 +11,6 @@ import { LoginPageObjectModel } from './object-models/login-page'
 import { UserRepository, UserService } from '~/features/user/user-service'
 
 type TestFixtures = {
-  /** Is the test user authenticated?
-   *
-   * @default 'authenticated'
-   */
-  authStatus: 'authenticated' | 'unauthenticated'
   /**
    * Generate a user that can be used in the test
    */
@@ -28,6 +23,12 @@ type TestFixtures = {
    *
    */
   signupUser: (
+    userOverrides?: Partial<{ email: string; password: string }>,
+  ) => Promise<{ id: number; email: string; password: string }>
+  /**
+   * Login a user that can be used in the test
+   */
+  loginUser: (
     userOverrides?: Partial<{ email: string; password: string }>,
   ) => Promise<{ id: number; email: string; password: string }>
   signupPage: SignupPageObjectModel
@@ -57,28 +58,6 @@ export const test = testBase.extend<TestFixtures, WorkerFixtures>({
     },
     { scope: 'worker' },
   ],
-  authStatus: 'authenticated',
-  page: async ({ authStatus, page, signupUser }, use) => {
-    if (authStatus === 'authenticated') {
-      const user = await signupUser()
-
-      const sessionCookie = createSessionCookie(validatedTestEnvironment)
-
-      const cookieHeader = await sessionCookie.serialize({
-        userId: user.id,
-      })
-
-      await page.context().addCookies([
-        {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          ...(setCookieParser.parseString(cookieHeader) as any),
-          domain: 'localhost',
-        },
-      ])
-    }
-
-    await use(page)
-  },
   makeUser: async ({}, use) => {
     await use((userOverrides) => {
       return {
@@ -98,6 +77,25 @@ export const test = testBase.extend<TestFixtures, WorkerFixtures>({
   },
   signupPage: async ({ page }, use) => {
     await use(new SignupPageObjectModel(page))
+  },
+  loginUser: async ({ signupUser, page }, use) => {
+    await use(async (userOverrides) => {
+      const user = await signupUser(userOverrides)
+      const sessionCookie = createSessionCookie(validatedTestEnvironment)
+      const cookieHeader = await sessionCookie.serialize({
+        userId: user.id,
+      })
+
+      await page.context().addCookies([
+        {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          ...(setCookieParser.parseString(cookieHeader) as any),
+          domain: 'localhost',
+        },
+      ])
+
+      return user
+    })
   },
   loginPage: async ({ page }, use) => {
     await use(new LoginPageObjectModel(page))

@@ -2,9 +2,8 @@ import { inArray } from 'drizzle-orm'
 import { expect, test } from '../playwright-utilities'
 import { notes, notesToTags, tags } from '~/database/schema'
 
-test.use({ authStatus: 'unauthenticated' })
-test('shows a note', async ({ page, signupUser, loginPage, db }) => {
-  const user = await signupUser()
+test('shows a note', async ({ page, loginUser, db }) => {
+  const user = await loginUser()
   const note = {
     title: 'Test Note',
     tags: ['test-tag', 'test-2-tag'],
@@ -46,12 +45,6 @@ test('shows a note', async ({ page, signupUser, loginPage, db }) => {
     throw new Error('Note not saved')
   }
 
-  await loginPage.goto()
-  await loginPage.login(user)
-
-  await expect(
-    page.getByRole('heading', { name: 'Welcome to the Home Page' }),
-  ).toBeVisible()
   await page.goto(`/notes/${savedNote.id}`)
 
   await expect(page.getByText(note.title)).toBeVisible()
