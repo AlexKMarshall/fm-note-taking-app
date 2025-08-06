@@ -1,7 +1,7 @@
 import { redirect } from 'react-router'
 import { type SessionStorage } from '~/session.server'
 
-export async function requireUser({
+export async function requireAuthenticatedUser({
   request,
   sessionStorage,
 }: {

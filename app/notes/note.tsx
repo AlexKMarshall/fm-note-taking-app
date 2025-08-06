@@ -1,9 +1,9 @@
 import type { Route } from './+types/note'
-import { requireUser } from '~/lib/require-user.server'
+import { requireAuthenticatedUser } from '~/lib/require-authenticated-user.server'
 import { Note } from '~/features/note/note'
 
 export async function loader({ context, request }: Route.LoaderArgs) {
-  await requireUser({
+  await requireAuthenticatedUser({
     request,
     sessionStorage: context.sessionStorage,
   })

@@ -1,5 +1,5 @@
 import { test, expect } from 'vitest'
-import { requireUser } from './require-user.server'
+import { requireAuthenticatedUser } from './require-authenticated-user.server'
 import { createSessionStorage } from '~/session.server'
 
 test('returns the user id for a valid session', async () => {
@@ -16,7 +16,7 @@ test('returns the user id for a valid session', async () => {
     },
   })
 
-  const result = await requireUser({ request, sessionStorage })
+  const result = await requireAuthenticatedUser({ request, sessionStorage })
 
   expect(result).toEqual({ userId: 1 })
 })
@@ -28,7 +28,9 @@ test('throws a redirect to login for a missing session', async () => {
   })
   const request = new Request('http://localhost/notes')
 
-  await expect(requireUser({ request, sessionStorage })).rejects.toEqual(
+  await expect(
+    requireAuthenticatedUser({ request, sessionStorage }),
+  ).rejects.toEqual(
     expect.objectContaining({
       status: 302,
     }),
@@ -53,7 +55,9 @@ test('throws a redirect to login for a malformed session', async () => {
     },
   })
 
-  await expect(requireUser({ request, sessionStorage })).rejects.toEqual(
+  await expect(
+    requireAuthenticatedUser({ request, sessionStorage }),
+  ).rejects.toEqual(
     expect.objectContaining({
       status: 302,
     }),
