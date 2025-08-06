@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
+import { allModes } from '../../.storybook/modes'
 import { Stack } from './stack'
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
@@ -26,6 +27,11 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {}
 
 export const ResponsiveGaps: Story = {
+  parameters: {
+    chromatic: {
+      modes: allModes,
+    },
+  },
   args: {
     gap: 'gap-2 md:gap-4 lg:gap-12',
   },

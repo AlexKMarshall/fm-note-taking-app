@@ -1,4 +1,5 @@
 import type { ComponentProps } from 'react'
+import { mergeTailwindClasses } from '~/lib/merge-tailwind-classes'
 
 export function Stack({
   gap,
@@ -29,11 +30,7 @@ export function Stack({
   return (
     <div
       {...props}
-      className={mergeTailwindClasses(['flex flex-col', gap, align, className])}
+      className={mergeTailwindClasses('flex flex-col', gap, align, className)}
     />
   )
-}
-
-function mergeTailwindClasses(classes: Array<string | undefined>) {
-  return classes.filter(Boolean).join(' ')
 }
