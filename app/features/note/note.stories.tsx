@@ -1,10 +1,16 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
+import { allModes } from '../../../.storybook/modes'
 import { Note } from './note'
 
 const meta = {
   title: 'Note',
   component: Note,
+  parameters: {
+    chromatic: {
+      modes: allModes,
+    },
+  },
   tags: ['autodocs'],
   args: {
     title: 'React Performance Optimization',
