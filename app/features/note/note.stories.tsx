@@ -22,7 +22,7 @@ const meta = {
 - Use React.lazy() for route-based splitting
 - Implement dynamic imports for heavy components
 
-2.	Memoization
+2. Memoization
 - useMemo for expensive calculations
 - useCallback for function props
 - React.memo for component optimization
