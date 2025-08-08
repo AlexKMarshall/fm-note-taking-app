@@ -38,7 +38,11 @@ export async function action({ request, context }: Route.ActionArgs) {
 
   const note = await noteService.createNote({
     title: submission.value.title ?? null,
-    tags: submission.value.tags?.split(',').map((t) => t.trim()) ?? [],
+    tags:
+      submission.value.tags
+        ?.split(',')
+        .map((t) => t.trim())
+        .filter(Boolean) ?? [],
     content: submission.value.content ?? null,
     authorId: userId,
   })
