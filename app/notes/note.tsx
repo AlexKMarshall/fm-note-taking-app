@@ -57,10 +57,10 @@ export default function NoteRoute({ loaderData }: Route.ComponentProps) {
 
   return (
     <Note
-      title={note.title}
+      title={note.title ?? 'Untitled'}
       tags={note.tags}
       lastEdited={note.lastEdited}
-      content={note.content}
+      content={note.content ?? ''}
     />
   )
 }

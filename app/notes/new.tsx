@@ -1,4 +1,4 @@
-import { Form } from 'react-router'
+import { Form, redirect } from 'react-router'
 import {
   getFormProps,
   getInputProps,
@@ -13,22 +13,25 @@ import { Separator } from '~/components/separator'
 import { Stack } from '~/components/stack'
 import { requireAuthenticatedUser } from '~/lib/require-authenticated-user.server'
 import { transformEmptyStringToUndefined } from '~/lib/validation'
+import { NoteRepository, NoteService } from '~/features/note/note-service'
+
+const TrimmedStringSchema = v.pipe(v.string(), v.trim())
 
 const NewNoteSchema = v.object({
   title: v.pipe(
     v.unknown(),
     transformEmptyStringToUndefined,
-    v.optional(v.string()),
+    v.optional(TrimmedStringSchema),
   ),
   tags: v.pipe(
     v.unknown(),
     transformEmptyStringToUndefined,
-    v.optional(v.string()),
+    v.optional(TrimmedStringSchema),
   ),
   content: v.pipe(
     v.unknown(),
     transformEmptyStringToUndefined,
-    v.optional(v.string()),
+    v.optional(TrimmedStringSchema),
   ),
 })
 
@@ -40,7 +43,11 @@ export async function loader({ context, request }: Route.LoaderArgs) {
   return null
 }
 
-export async function action({ request }: Route.ActionArgs) {
+export async function action({ request, context }: Route.ActionArgs) {
+  const { userId } = await requireAuthenticatedUser({
+    request,
+    sessionStorage: context.sessionStorage,
+  })
   const formData = await request.formData()
   const submission = parseWithValibot(formData, { schema: NewNoteSchema })
 
@@ -48,7 +55,16 @@ export async function action({ request }: Route.ActionArgs) {
     return submission.reply()
   }
 
-  console.log(submission.value)
+  const noteService = new NoteService(new NoteRepository(context.db))
+
+  const note = await noteService.createNote({
+    title: submission.value.title,
+    tags: submission.value.tags?.split(',').map((t) => t.trim()) ?? [],
+    content: submission.value.content,
+    authorId: userId,
+  })
+
+  return redirect(`/notes/${note.id}`)
 }
 
 export default function NoteRoute() {
