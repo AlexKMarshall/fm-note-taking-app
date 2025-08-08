@@ -75,17 +75,20 @@ export class NoteRepository implements INoteRepository {
     const existingTags = await this.db.query.tags.findMany({
       where: inArray(tagsTable.name, tags),
     })
-    const newTags = tags.filter(
+    const tagsToCreate = tags.filter(
       (tag) => !existingTags.some((t) => t.name === tag),
     )
-    if (newTags.length > 0) {
-      await this.db
-        .insert(tagsTable)
-        .values(newTags.map((tag) => ({ name: tag })))
-    }
-    const tagsForNote = await this.db.query.tags.findMany({
-      where: inArray(tagsTable.name, tags),
-    })
+
+    const newTags =
+      tagsToCreate.length > 0
+        ? await this.db
+            .insert(tagsTable)
+            .values(tagsToCreate.map((tag) => ({ name: tag })))
+            .returning()
+        : []
+
+    const tagsForNote = [...existingTags, ...newTags]
+
     const now = new Date().toISOString()
     const [note] = await this.db
       .insert(notesTable)
