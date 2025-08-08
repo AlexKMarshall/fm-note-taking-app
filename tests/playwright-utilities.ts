@@ -9,6 +9,7 @@ import { validatedTestEnvironment } from './test-environment'
 import { SignupPageObjectModel } from './object-models/signup-page'
 import { LoginPageObjectModel } from './object-models/login-page'
 import { UserRepository, UserService } from '~/features/user/user-service'
+import { NoteRepository, NoteService } from '~/features/note/note-service'
 
 type TestFixtures = {
   /**
@@ -33,6 +34,25 @@ type TestFixtures = {
   ) => Promise<{ id: number; email: string; password: string }>
   signupPage: SignupPageObjectModel
   loginPage: LoginPageObjectModel
+  makeNote: (
+    noteOverrides?: Partial<{
+      title: string | null
+      tags: string[]
+      content: string | null
+    }>,
+  ) => { title: string | null; tags: string[]; content: string | null }
+  saveNote: (
+    noteOverrides: Partial<{
+      title: string | null
+      tags: string[]
+      content: string | null
+    }> & { authorId: number },
+  ) => Promise<{
+    id: number
+    title: string | null
+    tags: string[]
+    content: string | null
+  }>
 }
 
 type WorkerFixtures = {
@@ -99,6 +119,26 @@ export const test = testBase.extend<TestFixtures, WorkerFixtures>({
   },
   loginPage: async ({ page }, use) => {
     await use(new LoginPageObjectModel(page))
+  },
+  makeNote: async ({}, use) => {
+    await use((noteOverrides) => {
+      return {
+        title: faker.lorem.sentence(),
+        tags: [faker.lorem.word(), faker.lorem.word()],
+        content: faker.lorem.paragraph(),
+        ...noteOverrides,
+      }
+    })
+  },
+  saveNote: async ({ db, makeNote }, use) => {
+    await use(async ({ authorId, ...noteOverrides }) => {
+      const noteService = new NoteService(new NoteRepository(db))
+      const note = await noteService.createNote({
+        ...makeNote(noteOverrides),
+        authorId,
+      })
+      return note
+    })
   },
 })
 

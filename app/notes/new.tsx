@@ -1,39 +1,18 @@
-import { Form, redirect } from 'react-router'
 import {
   getFormProps,
   getInputProps,
   getTextareaProps,
   useForm,
 } from '@conform-to/react'
-import * as v from 'valibot'
 import { parseWithValibot } from '@conform-to/valibot'
+import { Form, redirect } from 'react-router'
 import type { Route } from './+types/new'
 import { Icon } from '~/components/icon'
 import { Separator } from '~/components/separator'
 import { Stack } from '~/components/stack'
-import { requireAuthenticatedUser } from '~/lib/require-authenticated-user.server'
-import { transformEmptyStringToUndefined } from '~/lib/validation'
+import { CreateNoteSchema } from '~/features/note/_lib/create-note-schema'
 import { NoteRepository, NoteService } from '~/features/note/note-service'
-
-const TrimmedStringSchema = v.pipe(v.string(), v.trim())
-
-const NewNoteSchema = v.object({
-  title: v.pipe(
-    v.unknown(),
-    transformEmptyStringToUndefined,
-    v.optional(TrimmedStringSchema),
-  ),
-  tags: v.pipe(
-    v.unknown(),
-    transformEmptyStringToUndefined,
-    v.optional(TrimmedStringSchema),
-  ),
-  content: v.pipe(
-    v.unknown(),
-    transformEmptyStringToUndefined,
-    v.optional(TrimmedStringSchema),
-  ),
-})
+import { requireAuthenticatedUser } from '~/lib/require-authenticated-user.server'
 
 export async function loader({ context, request }: Route.LoaderArgs) {
   await requireAuthenticatedUser({
@@ -49,7 +28,7 @@ export async function action({ request, context }: Route.ActionArgs) {
     sessionStorage: context.sessionStorage,
   })
   const formData = await request.formData()
-  const submission = parseWithValibot(formData, { schema: NewNoteSchema })
+  const submission = parseWithValibot(formData, { schema: CreateNoteSchema })
 
   if (submission.status !== 'success') {
     return submission.reply()
@@ -58,9 +37,9 @@ export async function action({ request, context }: Route.ActionArgs) {
   const noteService = new NoteService(new NoteRepository(context.db))
 
   const note = await noteService.createNote({
-    title: submission.value.title,
+    title: submission.value.title ?? null,
     tags: submission.value.tags?.split(',').map((t) => t.trim()) ?? [],
-    content: submission.value.content,
+    content: submission.value.content ?? null,
     authorId: userId,
   })
 
@@ -70,7 +49,7 @@ export async function action({ request, context }: Route.ActionArgs) {
 export default function NoteRoute() {
   const [form, fields] = useForm({
     onValidate: ({ formData }) =>
-      parseWithValibot(formData, { schema: NewNoteSchema }),
+      parseWithValibot(formData, { schema: CreateNoteSchema }),
     shouldValidate: 'onSubmit',
   })
   return (
@@ -115,7 +94,7 @@ export default function NoteRoute() {
           {...getTextareaProps(fields.content)}
           className="min-h-80 grow-1 resize-none rounded-xs text-sm text-gray-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gray-500"
           placeholder="Start typing your note here…"
-          aria-label="Note"
+          aria-label="Content"
         />
         <div className="flex gap-4 border-t border-gray-200 pt-4 max-lg:hidden">
           <button

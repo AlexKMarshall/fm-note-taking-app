@@ -8,9 +8,9 @@ import {
 
 type CreateNoteDto = {
   authorId: number
-  title?: string
+  title: string | null
   tags: string[]
-  content?: string
+  content: string | null
 }
 
 type Note = {
