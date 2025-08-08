@@ -1,5 +1,5 @@
 import type { Route } from './+types/new'
-import { Note } from '~/features/note/note'
+import { NewNote } from '~/features/note/new-note'
 import { requireAuthenticatedUser } from '~/lib/require-authenticated-user.server'
 
 export async function loader({ context, request }: Route.LoaderArgs) {
@@ -11,7 +11,5 @@ export async function loader({ context, request }: Route.LoaderArgs) {
 }
 
 export default function NoteRoute() {
-  return (
-    <Note title="Untitled" tags={[]} lastEdited="Not yet saved" content="" />
-  )
+  return <NewNote />
 }
