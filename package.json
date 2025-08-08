@@ -27,10 +27,8 @@
   "dependencies": {
     "@conform-to/react": "1.8.2",
     "@conform-to/valibot": "1.8.2",
-    "@lexical/react": "^0.33.1",
     "drizzle-orm": "0.44.4",
     "isbot": "5.1.29",
-    "lexical": "^0.33.1",
     "react": "19.1.1",
     "react-dom": "19.1.1",
     "react-router": "7.7.1",
