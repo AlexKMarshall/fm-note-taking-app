@@ -1,49 +1,18 @@
-import { inArray } from 'drizzle-orm'
 import { expect, test } from '../playwright-utilities'
-import { notes, notesToTags, tags } from '~/database/schema'
+import { NoteRepository, NoteService } from '~/features/note/note-service'
 
 test('shows a note', async ({ page, loginUser, db }) => {
   const user = await loginUser()
+  const noteService = new NoteService(new NoteRepository(db))
   const note = {
     title: 'Test Note',
     tags: ['test-tag', 'test-2-tag'],
     content: 'This is a note',
   }
-
-  const tagsThatAlreadyExist = await db.query.tags.findMany({
-    where: inArray(tags.name, note.tags),
+  const savedNote = await noteService.createNote({
+    ...note,
+    authorId: user.id,
   })
-  const newTags = note.tags.filter(
-    (tag) => !tagsThatAlreadyExist.some((t) => t.name === tag),
-  )
-
-  if (newTags.length > 0) {
-    await db
-      .insert(tags)
-      .values(newTags.map((tag) => ({ name: tag })))
-      .returning()
-  }
-  const savedTags = await db.query.tags.findMany({
-    where: inArray(tags.name, note.tags),
-  })
-
-  const savedNotes = await db
-    .insert(notes)
-    .values({ title: note.title, content: note.content, authorId: user.id })
-    .returning({ id: notes.id })
-  for (const savedNote of savedNotes) {
-    for (const savedTag of savedTags) {
-      await db
-        .insert(notesToTags)
-        .values({ noteId: savedNote.id, tagId: savedTag.id })
-        .returning()
-    }
-  }
-
-  const savedNote = savedNotes[0]
-  if (!savedNote) {
-    throw new Error('Note not saved')
-  }
 
   await page.goto(`/notes/${savedNote.id}`)
 
