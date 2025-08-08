@@ -19,8 +19,8 @@ export const usersRelations = relations(users, ({ many }) => ({
 
 export const notes = sqliteTable('notes', {
   id: integer().primaryKey({ autoIncrement: true }),
-  title: text().notNull(),
-  content: text().notNull(),
+  title: text(),
+  content: text(),
   authorId: integer()
     .references(() => users.id)
     .notNull(),
@@ -59,9 +59,7 @@ export const notesToTags = sqliteTable(
       .references(() => tags.id)
       .notNull(),
   },
-  (table) => ({
-    pk: primaryKey({ columns: [table.noteId, table.tagId] }),
-  }),
+  (table) => [primaryKey({ columns: [table.noteId, table.tagId] })],
 )
 
 export const notesToTagsRelations = relations(notesToTags, ({ one }) => ({
