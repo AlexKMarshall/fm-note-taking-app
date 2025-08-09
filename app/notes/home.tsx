@@ -4,6 +4,7 @@ import { requireAuthenticatedUser } from '~/lib/require-authenticated-user.serve
 import { NoteLinks } from '~/features/note/note-links'
 import { NoteRepository, NoteService } from '~/features/note/note-service'
 import { formatDate } from '~/lib/date'
+import { FloatingIconButtonLink } from '~/components/floating-icon-button'
 
 export async function loader({ context, request }: Route.LoaderArgs) {
   const { userId } = await requireAuthenticatedUser({
@@ -28,9 +29,16 @@ export default function NotesHome({
   loaderData: { notes },
 }: Route.ComponentProps) {
   return (
-    <Stack gap="gap-4" className="px-4 py-5 md:px-8 md:py-6 lg:hidden">
+    <Stack gap="gap-4" className="relative px-4 py-5 md:px-8 md:py-6 lg:hidden">
       <h1 className="text-2xl font-bold text-gray-950">All Notes</h1>
       <NoteLinks notes={notes} />
+      <FloatingIconButtonLink
+        to="/notes/new"
+        icon="icon-plus"
+        label="Add Note"
+        variant="primary"
+        className="absolute right-4 bottom-4 md:right-8 md:bottom-8"
+      />
     </Stack>
   )
 }
