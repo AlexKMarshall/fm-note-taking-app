@@ -3,6 +3,7 @@ import { withRouter } from 'storybook-addon-remix-react-router'
 import { userEvent, within } from 'storybook/test'
 import { FooterLink } from './footer-link'
 import { iconNames } from './icon/names'
+import { allModes } from '.storybook/modes'
 
 const meta = {
   title: 'FooterLink',
@@ -10,6 +11,12 @@ const meta = {
   decorators: [withRouter],
   parameters: {
     layout: 'centered',
+    chromatic: {
+      modes: {
+        small: allModes.small,
+        medium: allModes.medium,
+      },
+    },
   },
   args: {
     to: '/',
