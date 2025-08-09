@@ -12,9 +12,11 @@ export default [
     route('signup', 'auth/signup.tsx'),
     route('login', 'auth/login.tsx'),
   ]),
-  ...prefix('notes', [
-    index('./notes/home.tsx'),
-    route('new', './notes/new.tsx'),
-    route(':id', './notes/note.tsx'),
+  layout('./notes/layout.tsx', [
+    ...prefix('notes', [
+      index('./notes/home.tsx'),
+      route('new', './notes/new.tsx'),
+      route(':id', './notes/note.tsx'),
+    ]),
   ]),
 ] satisfies RouteConfig
