@@ -1,5 +1,5 @@
+import clsx from 'clsx'
 import type { ComponentProps } from 'react'
-import { mergeTailwindClasses } from '~/lib/merge-tailwind-classes'
 
 export function Stack({
   gap,
@@ -28,9 +28,6 @@ export function Stack({
   align?: string
 }) {
   return (
-    <div
-      {...props}
-      className={mergeTailwindClasses('flex flex-col', gap, align, className)}
-    />
+    <div {...props} className={clsx('flex flex-col', gap, align, className)} />
   )
 }

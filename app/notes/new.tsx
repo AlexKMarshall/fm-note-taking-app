@@ -13,6 +13,7 @@ import { Stack } from '~/components/stack'
 import { CreateNoteSchema } from '~/features/note/_lib/create-note-schema'
 import { NoteRepository, NoteService } from '~/features/note/note-service'
 import { requireAuthenticatedUser } from '~/lib/require-authenticated-user.server'
+import { Button } from '~/components/button'
 
 export async function loader({ context, request }: Route.LoaderArgs) {
   await requireAuthenticatedUser({
@@ -104,12 +105,9 @@ export default function NoteRoute() {
           aria-label="Content"
         />
         <div className="flex gap-4 border-t border-gray-200 pt-4 max-lg:hidden">
-          <button
-            className="cursor-pointer rounded-lg bg-blue-500 px-4 py-3 text-white"
-            type="submit"
-          >
+          <Button variant="primary" type="submit">
             Save Note
-          </button>
+          </Button>
         </div>
       </Stack>
     </Form>
