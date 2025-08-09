@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
+import clsx from 'clsx'
 import { Separator } from './separator'
-import { mergeTailwindClasses } from '~/lib/merge-tailwind-classes'
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
@@ -21,7 +21,7 @@ const meta = {
   tags: ['autodocs'],
   render: (args) => (
     <div
-      className={mergeTailwindClasses(
+      className={clsx(
         'flex gap-4',
         args.orientation === 'horizontal' ? 'flex-col' : 'flex-row',
       )}

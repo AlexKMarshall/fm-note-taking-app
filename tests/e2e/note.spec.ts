@@ -41,3 +41,26 @@ test('create a note', async ({ page, loginUser, makeNote }) => {
     await expect(noteDisplay.getByText(tag)).toBeVisible()
   }
 })
+
+test('show all notes', async ({ page, loginUser, saveNote }) => {
+  const user = await loginUser()
+  const savedNoteOne = await saveNote({ authorId: user.id })
+  const savedNoteTwo = await saveNote({ authorId: user.id })
+
+  await page.goto('/notes')
+
+  await expect(
+    page.getByRole('link', { name: savedNoteOne.title ?? '' }),
+  ).toBeVisible()
+  await expect(
+    page.getByRole('link', { name: savedNoteTwo.title ?? '' }),
+  ).toBeVisible()
+
+  await page.getByRole('link', { name: savedNoteOne.title ?? '' }).click()
+
+  const noteDisplay = page.getByTestId('note-display')
+
+  await expect(
+    noteDisplay.getByRole('heading', { name: savedNoteOne.title ?? '' }),
+  ).toBeVisible()
+})
