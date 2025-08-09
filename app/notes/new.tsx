@@ -60,7 +60,7 @@ export default function NoteRoute() {
     <Form method="post" {...getFormProps(form)}>
       <Stack
         gap="gap-3 md:gap-4"
-        className="min-h-screen px-4 py-5 md:px-8 md:py-6 lg:px-6 lg:py-5"
+        className="px-4 py-5 md:px-8 md:py-6 lg:px-6 lg:py-5"
       >
         <div className="flex justify-between gap-4 border-b border-gray-200 pb-3 lg:hidden">
           <div>Go back placeholder</div>
