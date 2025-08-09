@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { withRouter } from 'storybook-addon-remix-react-router'
-import { userEvent, within } from 'storybook/test'
 import { FooterLink } from './footer-link'
 import { iconNames } from './icon/names'
 import { allModes } from '.storybook/modes'
@@ -36,9 +35,3 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const Default: Story = {}
-export const Hovered: Story = {
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement)
-    await userEvent.hover(canvas.getByRole('link', { name: 'Home' }))
-  },
-}
