@@ -17,6 +17,7 @@ export function Note({
     <Stack
       gap="gap-3 md:gap-4"
       className="px-4 py-5 md:px-8 md:py-6 lg:px-6 lg:py-5"
+      data-testid="note-display"
     >
       <div className="border-b border-gray-200 pb-3 lg:hidden">
         Mobile header controls

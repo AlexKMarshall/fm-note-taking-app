@@ -64,7 +64,10 @@ export default function NoteRoute() {
       >
         <div className="flex justify-between gap-4 border-b border-gray-200 pb-3 lg:hidden">
           <div>Go back placeholder</div>
-          <button className="cursor-pointer text-blue-500" type="submit">
+          <button
+            className="cursor-pointer text-sm text-blue-500"
+            type="submit"
+          >
             Save Note
           </button>
         </div>

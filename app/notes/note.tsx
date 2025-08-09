@@ -4,6 +4,7 @@ import type { Route } from './+types/note'
 import { requireAuthenticatedUser } from '~/lib/require-authenticated-user.server'
 import { Note } from '~/features/note/note'
 import { notes } from '~/database/schema'
+import { formatDate } from '~/lib/date'
 
 export async function loader({ context, request, params }: Route.LoaderArgs) {
   const { userId } = await requireAuthenticatedUser({
@@ -42,11 +43,7 @@ export async function loader({ context, request, params }: Route.LoaderArgs) {
     title: note.title,
     content: note.content,
     tags: note.notesToTags.map((noteToTag) => noteToTag.tag.name),
-    lastEdited: new Date(note.updatedAt).toLocaleDateString('en-GB', {
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric',
-    }),
+    lastEdited: formatDate(note.updatedAt),
   }
 
   return { note: formattedNote }

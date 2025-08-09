@@ -7,10 +7,14 @@ test('shows a note', async ({ page, loginUser, saveNote }) => {
 
   await page.goto(`/notes/${savedNote.id}`)
 
-  await expect(page.getByText(savedNote.title ?? '')).toBeVisible()
-  await expect(page.getByText(savedNote.content ?? '')).toBeVisible()
+  const noteDisplay = page.getByTestId('note-display')
+
+  await expect(
+    noteDisplay.getByRole('heading', { name: savedNote.title ?? '' }),
+  ).toBeVisible()
+  await expect(noteDisplay.getByText(savedNote.content ?? '')).toBeVisible()
   for (const tag of savedNote.tags) {
-    await expect(page.getByText(tag)).toBeVisible()
+    await expect(noteDisplay.getByText(tag)).toBeVisible()
   }
 })
 
@@ -27,9 +31,13 @@ test('create a note', async ({ page, loginUser, makeNote }) => {
 
   await page.getByRole('button', { name: 'Save' }).click()
 
-  await expect(page.getByText(note.title ?? '')).toBeVisible()
-  await expect(page.getByText(note.content ?? '')).toBeVisible()
+  const noteDisplay = page.getByTestId('note-display')
+
+  await expect(
+    noteDisplay.getByRole('heading', { name: note.title ?? '' }),
+  ).toBeVisible()
+  await expect(noteDisplay.getByText(note.content ?? '')).toBeVisible()
   for (const tag of note.tags) {
-    await expect(page.getByText(tag)).toBeVisible()
+    await expect(noteDisplay.getByText(tag)).toBeVisible()
   }
 })

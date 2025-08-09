@@ -1,23 +1,34 @@
-import { Outlet } from 'react-router'
-import { MobileFooter } from '~/components/mobile-footer'
-import { MobileHeader } from '~/components/mobile-header'
+import { Outlet, useLoaderData } from 'react-router'
+import type { Route } from './+types/layout'
+import { NoteRepository, NoteService } from '~/features/note/note-service'
+import { requireAuthenticatedUser } from '~/lib/require-authenticated-user.server'
+import { NotesLayout } from '~/features/note/notes-layout'
+import { formatDate } from '~/lib/date'
 
-export default function NotesLayout() {
+export async function loader({ request, context }: Route.LoaderArgs) {
+  const { userId } = await requireAuthenticatedUser({
+    request,
+    sessionStorage: context.sessionStorage,
+  })
+
+  const noteService = new NoteService(new NoteRepository(context.db))
+  const notes = await noteService.getNotesByAuthor({ authorId: userId })
+
+  return {
+    notes: notes.map((note) => ({
+      id: note.id,
+      title: note.title,
+      tags: note.tags,
+      lastEdited: formatDate(note.updatedAt),
+    })),
+  }
+}
+
+export default function NotesLayoutRoute() {
+  const { notes } = useLoaderData<typeof loader>()
   return (
-    <div className="flex min-h-screen flex-col bg-gray-100 lg:bg-white">
-      <MobileHeader />
-      <main className="flex flex-1 flex-col rounded-t-xl bg-white lg:rounded-none">
-        <div className="border-b border-b-gray-200 p-8 max-lg:hidden">
-          <h1 className="text-2xl font-bold text-gray-950">All Notes</h1>
-        </div>
-        <div className="grid flex-1 lg:grid-cols-[auto_1fr]">
-          <div className="border-r border-gray-200 py-5 pr-4 pl-8 max-lg:hidden">
-            Desktop sidebar
-          </div>
-          <Outlet />
-        </div>
-      </main>
-      <MobileFooter />
-    </div>
+    <NotesLayout notes={notes}>
+      <Outlet />
+    </NotesLayout>
   )
 }

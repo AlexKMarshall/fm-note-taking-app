@@ -23,6 +23,7 @@ type Note = {
 
 export interface INoteService {
   createNote(createNoteDto: CreateNoteDto): Promise<Note>
+  getNotesByAuthor(getNotesDto: { authorId: number }): Promise<Note[]>
 }
 
 export class NoteService implements INoteService {
@@ -31,11 +32,15 @@ export class NoteService implements INoteService {
   async createNote(createNoteDto: CreateNoteDto) {
     return this.noteRepository.create(createNoteDto)
   }
+  async getNotesByAuthor(getNotesDto: { authorId: number }) {
+    return this.noteRepository.getNotesByAuthor(getNotesDto)
+  }
 }
 
 export interface INoteRepository {
   create(createNoteDto: CreateNoteDto): Promise<Note>
   get(getDto: { noteId: number; authorId: number }): Promise<Note | null>
+  getNotesByAuthor(getNotesDto: { authorId: number }): Promise<Note[]>
 }
 
 export class NoteRepository implements INoteRepository {
@@ -69,6 +74,35 @@ export class NoteRepository implements INoteRepository {
     }
     const { notesToTags, ...restNote } = note
     return { ...restNote, tags: notesToTags.map((t) => t.tag.name) }
+  }
+
+  async getNotesByAuthor({ authorId }: { authorId: number }) {
+    const notes = await this.db.query.notes.findMany({
+      where: eq(notesTable.authorId, authorId),
+      columns: {
+        id: true,
+        title: true,
+        content: true,
+        updatedAt: true,
+      },
+      with: {
+        notesToTags: {
+          columns: {},
+          with: {
+            tag: {
+              columns: {
+                name: true,
+              },
+            },
+          },
+        },
+      },
+    })
+
+    return notes.map((note) => {
+      const { notesToTags, ...restNote } = note
+      return { ...restNote, tags: notesToTags.map((t) => t.tag.name) }
+    })
   }
 
   async create({ tags, ...createNoteDto }: CreateNoteDto) {
