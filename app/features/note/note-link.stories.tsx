@@ -1,5 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { withRouter } from 'storybook-addon-remix-react-router'
+import {
+  reactRouterParameters,
+  withRouter,
+} from 'storybook-addon-remix-react-router'
 import { NoteLink } from './note-link'
 
 const meta = {
@@ -11,7 +14,7 @@ const meta = {
     note: {
       title: 'React Performance Optimization',
       tags: ['Dev', 'React'],
-      lastUpdated: '29 Oct 2024',
+      lastEdited: '29 Oct 2024',
     },
   },
   parameters: {
@@ -25,3 +28,16 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const Default: Story = {}
+export const Current: Story = {
+  parameters: {
+    reactRouter: reactRouterParameters({
+      location: { path: '/notes/123' },
+      routing: { path: '/notes/123' },
+    }),
+  },
+}
+export const Untitled: Story = {
+  args: {
+    note: {},
+  },
+}

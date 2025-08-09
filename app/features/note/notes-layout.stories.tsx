@@ -1,12 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
+import type { ComponentProps } from 'react'
 import {
-  reactRouterOutlet,
   reactRouterParameters,
   withRouter,
 } from 'storybook-addon-remix-react-router'
-import type { ComponentProps } from 'react'
-import NotesLayout from './layout'
+import { NotesLayout } from './notes-layout'
 import { allModes } from '.storybook/modes'
 
 import { Note } from '~/features/note/note'
@@ -34,13 +33,31 @@ TODO: Benchmark current application and identify bottlenecks`,
 }
 
 const meta = {
-  title: 'Routes/NotesLayout',
+  title: 'Features/Note/NotesLayout',
   component: NotesLayout,
   decorators: [withRouter],
+  args: {
+    notes: [
+      {
+        id: 1,
+        title: 'React Performance Optimization',
+        tags: ['Dev', 'React'],
+        lastEdited: '29 Oct 2024',
+      },
+      {
+        id: 2,
+        title: 'Japan Travel Planning',
+        tags: ['Travel', 'Personal'],
+        lastEdited: '28 Oct 2024',
+      },
+    ],
+    children: <Note {...noteArgs} />,
+  },
   parameters: {
     layout: 'fullscreen',
     reactRouter: reactRouterParameters({
-      routing: reactRouterOutlet(<Note {...noteArgs} />),
+      location: { path: '/notes/1' },
+      routing: { path: '/notes/1' },
     }),
     chromatic: {
       modes: allModes,
