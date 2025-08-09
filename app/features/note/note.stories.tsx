@@ -4,7 +4,7 @@ import { allModes } from '../../../.storybook/modes'
 import { Note } from './note'
 
 const meta = {
-  title: 'Note',
+  title: 'Features/Note/Note',
   component: Note,
   parameters: {
     chromatic: {
