@@ -1,9 +1,7 @@
-import { Fragment, type ReactNode } from 'react'
+import { type ReactNode } from 'react'
+import { NoteLinks } from './note-links'
 import { MobileFooter } from '~/components/mobile-footer'
 import { MobileHeader } from '~/components/mobile-header'
-import { Separator } from '~/components/separator'
-import { Stack } from '~/components/stack'
-import { NoteLink } from '~/features/note/note-link'
 
 export function NotesLayout({
   notes,
@@ -26,14 +24,7 @@ export function NotesLayout({
         </div>
         <div className="grid flex-1 lg:grid-cols-[minmax(auto,17rem)_1fr]">
           <div className="border-r border-gray-200 py-5 pr-4 pl-8 max-lg:hidden">
-            <Stack gap="gap-1">
-              {notes.map((note) => (
-                <Fragment key={note.id}>
-                  <NoteLink to={`/notes/${note.id}`} note={note} />
-                  <Separator orientation="horizontal" className="last:hidden" />
-                </Fragment>
-              ))}
-            </Stack>
+            <NoteLinks notes={notes} />
           </div>
           {children}
         </div>
