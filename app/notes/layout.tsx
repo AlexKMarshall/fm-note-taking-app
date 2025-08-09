@@ -3,6 +3,7 @@ import type { Route } from './+types/layout'
 import { NoteRepository, NoteService } from '~/features/note/note-service'
 import { requireAuthenticatedUser } from '~/lib/require-authenticated-user.server'
 import { NotesLayout } from '~/features/note/notes-layout'
+import { formatDate } from '~/lib/date'
 
 export async function loader({ request, context }: Route.LoaderArgs) {
   const { userId } = await requireAuthenticatedUser({
@@ -18,11 +19,7 @@ export async function loader({ request, context }: Route.LoaderArgs) {
       id: note.id,
       title: note.title,
       tags: note.tags,
-      lastEdited: new Date(note.updatedAt).toLocaleDateString('en-GB', {
-        day: 'numeric',
-        month: 'short',
-        year: 'numeric',
-      }),
+      lastEdited: formatDate(note.updatedAt),
     })),
   }
 }
