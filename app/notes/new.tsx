@@ -65,7 +65,7 @@ export default function NoteRoute() {
         gap="gap-3 md:gap-4"
         className="px-4 py-5 md:px-8 md:py-6 lg:px-6 lg:py-5"
       >
-        <div className="flex justify-between gap-4 border-b border-gray-200 pb-3 lg:hidden">
+        <div className="flex justify-between gap-4 lg:hidden">
           <TextButtonLink to="/notes" variant="secondary">
             <Icon name="icon-arrow-left" className="size-4" />
             Go back
@@ -79,6 +79,7 @@ export default function NoteRoute() {
             </TextButton>
           </Cluster>
         </div>
+        <Separator orientation="horizontal" className="lg:hidden" />
         <input
           {...getInputProps(fields.title, { type: 'text' })}
           aria-label="Title"

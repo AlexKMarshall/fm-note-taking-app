@@ -1,11 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
+import { withRouter } from 'storybook-addon-remix-react-router'
 import { allModes } from '../../../.storybook/modes'
 import { Note } from './note'
 
 const meta = {
   title: 'Features/Note/Note',
   component: Note,
+  decorators: [withRouter],
   parameters: {
     chromatic: {
       modes: allModes,

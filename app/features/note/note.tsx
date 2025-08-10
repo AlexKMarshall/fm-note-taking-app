@@ -1,6 +1,9 @@
+import { Cluster } from '~/components/cluster'
 import { Icon } from '~/components/icon'
+import { IconButton } from '~/components/icon-button'
 import { Separator } from '~/components/separator'
 import { Stack } from '~/components/stack'
+import { TextButtonLink } from '~/components/text-button'
 
 export function Note({
   title,
@@ -19,9 +22,16 @@ export function Note({
       className="px-4 py-5 md:px-8 md:py-6 lg:px-6 lg:py-5"
       data-testid="note-display"
     >
-      <div className="border-b border-gray-200 pb-3 lg:hidden">
-        Mobile header controls
+      <div className="flex justify-between gap-4 lg:hidden">
+        <TextButtonLink to="/notes" variant="secondary">
+          <Icon name="icon-arrow-left" className="size-4" />
+          Go back
+        </TextButtonLink>
+        <Cluster gap="gap-4">
+          <IconButton icon="icon-delete" label="Delete note" />
+        </Cluster>
       </div>
+      <Separator orientation="horizontal" className="lg:hidden" />
       <h1 className="text-2xl font-bold text-gray-950">{title}</h1>
       <div className="grid grid-cols-[minmax(auto,7rem)_1fr] gap-x-2 gap-y-1 text-xs text-gray-700 md:gap-y-2">
         <div className="flex items-center gap-2 py-1">
