@@ -1,3 +1,4 @@
+import { DeleteNoteModal } from './delete-note-modal'
 import { Cluster } from '~/components/cluster'
 import { Button } from '~/components/button'
 import { Icon } from '~/components/icon'
@@ -30,7 +31,15 @@ export function Note({
             Go back
           </TextButtonLink>
           <Cluster gap="gap-4">
-            <IconButton icon="icon-delete" label="Delete note" />
+            <DeleteNoteModal
+              trigger={({ show }) => (
+                <IconButton
+                  icon="icon-delete"
+                  label="Delete note"
+                  onClick={show}
+                />
+              )}
+            />
           </Cluster>
         </div>
         <Separator orientation="horizontal" className="lg:hidden" />
@@ -56,10 +65,14 @@ export function Note({
         gap="gap-3"
         className="border-l border-gray-200 py-5 pr-8 pl-4 max-lg:hidden"
       >
-        <Button variant="border">
-          <Icon name="icon-delete" className="size-5" />
-          Delete note
-        </Button>
+        <DeleteNoteModal
+          trigger={({ show }) => (
+            <Button variant="border" onClick={show}>
+              <Icon name="icon-delete" className="size-5" />
+              Delete note
+            </Button>
+          )}
+        />
       </Stack>
     </div>
   )
