@@ -4,6 +4,7 @@ import type { ComponentProps } from 'react'
 export function Cluster({
   gap,
   align,
+  justify,
   className,
   ...props
 }: ComponentProps<'div'> & {
@@ -26,11 +27,26 @@ export function Cluster({
    * @example <Cluster align="items-stretch md:items-center"/>
    */
   align?: string
+  /**
+   * The justification of the items in the cluster. Accepts a tailwind justification value string
+   *
+   * We cannot type-check the justification value as tailwind doesn't accept dynamic strings
+   * So it's up to you to make sure the justification value is valid.
+   * @example <Cluster justify="justify-start"/>
+   * @example <Cluster justify="justify-end md:justify-center"/>
+   */
+  justify?: string
 }) {
   return (
     <div
       {...props}
-      className={clsx('flex flex-row flex-wrap', gap, align, className)}
+      className={clsx(
+        'flex flex-row flex-wrap',
+        gap,
+        align,
+        justify,
+        className,
+      )}
     />
   )
 }
