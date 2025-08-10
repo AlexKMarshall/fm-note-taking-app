@@ -15,7 +15,7 @@ const meta = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['primary', 'secondary'],
+      options: ['primary', 'secondary', 'border'],
     },
   },
   tags: ['autodocs'],
@@ -33,6 +33,12 @@ export const Primary: Story = {
 export const Secondary: Story = {
   args: {
     variant: 'secondary',
+  },
+}
+
+export const Border: Story = {
+  args: {
+    variant: 'border',
   },
 }
 

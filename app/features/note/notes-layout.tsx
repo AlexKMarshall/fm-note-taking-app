@@ -3,6 +3,7 @@ import { NoteLinks } from './note-links'
 import { MobileFooter } from '~/components/mobile-footer'
 import { MobileHeader } from '~/components/mobile-header'
 import { ButtonLink } from '~/components/button'
+import { Stack } from '~/components/stack'
 
 export function NotesLayout({
   notes,
@@ -24,12 +25,15 @@ export function NotesLayout({
           <h1 className="text-2xl font-bold text-gray-950">All Notes</h1>
         </div>
         <div className="grid flex-1 lg:grid-cols-[minmax(auto,17rem)_1fr]">
-          <div className="border-r border-gray-200 py-5 pr-4 pl-8 max-lg:hidden">
+          <Stack
+            gap="gap-4"
+            className="border-r border-gray-200 py-5 pr-4 pl-8 max-lg:hidden"
+          >
             <ButtonLink to="/notes/new" variant="primary">
               + Create New Note
             </ButtonLink>
             <NoteLinks notes={notes} />
-          </div>
+          </Stack>
           {children}
         </div>
       </main>
