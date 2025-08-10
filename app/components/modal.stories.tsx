@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
+import { withRouter } from 'storybook-addon-remix-react-router'
 
 import { Modal } from './modal'
 import { Button } from './button'
@@ -6,6 +7,7 @@ import { Button } from './button'
 const meta = {
   title: 'Modal',
   component: Modal,
+  decorators: [withRouter],
   parameters: {
     layout: 'centered',
   },
