@@ -13,7 +13,9 @@ import { Stack } from '~/components/stack'
 import { CreateNoteSchema } from '~/features/note/_lib/create-note-schema'
 import { NoteRepository, NoteService } from '~/features/note/note-service'
 import { requireAuthenticatedUser } from '~/lib/require-authenticated-user.server'
-import { Button } from '~/components/button'
+import { Button, ButtonLink } from '~/components/button'
+import { Cluster } from '~/components/cluster'
+import { TextButton, TextButtonLink } from '~/components/text-button'
 
 export async function loader({ context, request }: Route.LoaderArgs) {
   await requireAuthenticatedUser({
@@ -64,13 +66,18 @@ export default function NoteRoute() {
         className="px-4 py-5 md:px-8 md:py-6 lg:px-6 lg:py-5"
       >
         <div className="flex justify-between gap-4 border-b border-gray-200 pb-3 lg:hidden">
-          <div>Go back placeholder</div>
-          <button
-            className="cursor-pointer text-sm text-blue-500"
-            type="submit"
-          >
-            Save Note
-          </button>
+          <TextButtonLink to="/notes" variant="secondary">
+            <Icon name="icon-arrow-left" className="size-4" />
+            Go back
+          </TextButtonLink>
+          <Cluster gap="gap-4">
+            <TextButtonLink to="/notes" variant="secondary">
+              Cancel
+            </TextButtonLink>
+            <TextButton variant="primary" type="submit">
+              Save Note
+            </TextButton>
+          </Cluster>
         </div>
         <input
           {...getInputProps(fields.title, { type: 'text' })}
@@ -104,11 +111,15 @@ export default function NoteRoute() {
           placeholder="Start typing your note here…"
           aria-label="Content"
         />
-        <div className="flex gap-4 border-t border-gray-200 pt-4 max-lg:hidden">
+        <Separator orientation="horizontal" className="max-lg:hidden" />
+        <Cluster gap="gap-4" className="max-lg:hidden">
           <Button variant="primary" type="submit">
             Save Note
           </Button>
-        </div>
+          <ButtonLink to="/notes" variant="secondary">
+            Cancel
+          </ButtonLink>
+        </Cluster>
       </Stack>
     </Form>
   )

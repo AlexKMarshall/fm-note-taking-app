@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
-import { withRouter } from 'storybook-addon-remix-react-router'
 import { allModes } from '../../.storybook/modes'
 import { Cluster } from './cluster'
 import { Button } from './button'
@@ -8,7 +7,6 @@ import { Button } from './button'
 const meta = {
   title: 'Cluster',
   component: Cluster,
-  decorators: [withRouter],
   args: {
     children: (
       <>
