@@ -11,7 +11,7 @@ const buttonStyles = tv({
       secondary:
         'border-gray-100 bg-gray-100 text-gray-600 hover:border-gray-300 hover:bg-white hover:text-gray-950 hover:shadow-xs focus-visible:border-gray-300 focus-visible:bg-white focus-visible:text-gray-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-500',
       border:
-        'text-950 border-gray-300 bg-white hover:border-gray-100 hover:bg-gray-100 hover:text-gray-600 focus-visible:border-gray-300 focus-visible:bg-white focus-visible:text-gray-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-500',
+        'border-gray-300 bg-white text-gray-950 hover:border-gray-100 hover:bg-gray-100 hover:text-gray-600 focus-visible:border-gray-300 focus-visible:bg-white focus-visible:text-gray-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-500',
     },
   },
 })
@@ -38,7 +38,9 @@ export function ButtonLink({
   className,
   variant,
   ...props
-}: ComponentProps<typeof Link> & { variant: 'primary' | 'secondary' }) {
+}: ComponentProps<typeof Link> & {
+  variant: 'primary' | 'secondary' | 'border'
+}) {
   return (
     <Link {...props} className={buttonStyles({ variant, className })}>
       {children}
