@@ -56,7 +56,7 @@ export const notesToTags = sqliteTable(
       .references(() => notes.id)
       .notNull(),
     tagId: integer()
-      .references(() => tags.id)
+      .references(() => tags.id, { onDelete: 'cascade' })
       .notNull(),
   },
   (table) => [primaryKey({ columns: [table.noteId, table.tagId] })],
