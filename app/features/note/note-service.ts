@@ -24,6 +24,7 @@ type Note = {
 export interface INoteService {
   createNote(createNoteDto: CreateNoteDto): Promise<Note>
   getNotesByAuthor(getNotesDto: { authorId: number }): Promise<Note[]>
+  deleteNote(deleteDto: { noteId: number; authorId: number }): Promise<void>
 }
 
 export class NoteService implements INoteService {
@@ -35,12 +36,16 @@ export class NoteService implements INoteService {
   async getNotesByAuthor(getNotesDto: { authorId: number }) {
     return this.noteRepository.getNotesByAuthor(getNotesDto)
   }
+  async deleteNote(deleteDto: { noteId: number; authorId: number }) {
+    return this.noteRepository.deleteNote(deleteDto)
+  }
 }
 
 export interface INoteRepository {
   create(createNoteDto: CreateNoteDto): Promise<Note>
   get(getDto: { noteId: number; authorId: number }): Promise<Note | null>
   getNotesByAuthor(getNotesDto: { authorId: number }): Promise<Note[]>
+  deleteNote(deleteDto: { noteId: number; authorId: number }): Promise<void>
 }
 
 export class NoteRepository implements INoteRepository {
@@ -143,5 +148,11 @@ export class NoteRepository implements INoteRepository {
       throw new Error('Failed to create note')
     }
     return noteToReturn
+  }
+
+  async deleteNote({ noteId, authorId }: { noteId: number; authorId: number }) {
+    await this.db
+      .delete(notesTable)
+      .where(and(eq(notesTable.id, noteId), eq(notesTable.authorId, authorId)))
   }
 }

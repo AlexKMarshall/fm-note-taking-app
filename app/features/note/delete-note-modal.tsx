@@ -1,4 +1,5 @@
-import type { ComponentProps } from 'react'
+import { type ComponentProps } from 'react'
+import { Form } from 'react-router'
 import { Button } from '~/components/button'
 import { Modal } from '~/components/modal'
 
@@ -11,7 +12,18 @@ export function DeleteNoteModal({
       icon="icon-delete"
       title="Delete Note"
       description="Are you sure you want to permanently delete this note? This action cannot be undone."
-      action={<Button variant="destructive">Delete Note</Button>}
+      action={
+        <Form method="post">
+          <Button
+            variant="destructive"
+            name="intent"
+            value="delete"
+            type="submit"
+          >
+            Delete Note
+          </Button>
+        </Form>
+      }
     />
   )
 }

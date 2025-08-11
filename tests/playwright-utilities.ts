@@ -1,13 +1,14 @@
 /* eslint-disable react-hooks/rules-of-hooks */ // This isn't a react component file, rules of hooks don't apply here
-import { test as testBase } from '@playwright/test'
 import { faker } from '@faker-js/faker'
+import { expect, test as testBase } from '@playwright/test'
 import setCookieParser from 'set-cookie-parser'
 import { type PlatformProxy, getPlatformProxy } from 'wrangler'
 import { createSessionCookie } from '../app/session.server'
 import { type Database, getDatabase } from '../database'
-import { validatedTestEnvironment } from './test-environment'
-import { SignupPageObjectModel } from './object-models/signup-page'
 import { LoginPageObjectModel } from './object-models/login-page'
+import { NotePageObjectModel } from './object-models/note-page'
+import { SignupPageObjectModel } from './object-models/signup-page'
+import { validatedTestEnvironment } from './test-environment'
 import { UserRepository, UserService } from '~/features/user/user-service'
 import { NoteRepository, NoteService } from '~/features/note/note-service'
 
@@ -53,6 +54,7 @@ type TestFixtures = {
     tags: string[]
     content: string | null
   }>
+  notePage: NotePageObjectModel
 }
 
 type WorkerFixtures = {
@@ -139,6 +141,9 @@ export const test = testBase.extend<TestFixtures, WorkerFixtures>({
       })
       return note
     })
+  },
+  notePage: async ({ page }, use) => {
+    await use(new NotePageObjectModel(page, expect))
   },
 })
 

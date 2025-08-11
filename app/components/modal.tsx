@@ -22,7 +22,7 @@ type ModalContext = {
 
 const ModalContext = createContext<ModalContext | null>(null)
 
-function useModal() {
+export function useModal() {
   const context = use(ModalContext)
   if (!context) {
     throw new Error('useModal must be used within a ModalRoot')
@@ -96,9 +96,13 @@ export function Content({
           </div>
         ) : null}
         <Stack gap="gap-1.5" className="shrink">
-          <h2 className="font-bold text-gray-950">{title}</h2>
+          <h2 className="font-bold text-gray-950" id={titleId}>
+            {title}
+          </h2>
           {description ? (
-            <p className="text-sm text-pretty text-gray-700">{description}</p>
+            <p className="text-sm text-pretty text-gray-700" id={descriptionId}>
+              {description}
+            </p>
           ) : null}
         </Stack>
       </div>
