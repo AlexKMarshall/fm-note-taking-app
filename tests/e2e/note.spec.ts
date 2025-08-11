@@ -1,6 +1,6 @@
 import { expect, test } from '../playwright-utilities'
 
-test('shows a note', async ({ page, loginUser, saveNote, notePage }) => {
+test('shows a note', async ({ loginUser, saveNote, notePage }) => {
   const user = await loginUser()
 
   const savedNote = await saveNote({ authorId: user.id })
@@ -38,7 +38,7 @@ test('create a note', async ({ page, loginUser, makeNote, notePage }) => {
   }
 })
 
-test('show all notes', async ({ page, loginUser, saveNote }) => {
+test('show all notes', async ({ page, loginUser, saveNote, notePage }) => {
   const user = await loginUser()
   const savedNoteOne = await saveNote({ authorId: user.id })
   const savedNoteTwo = await saveNote({ authorId: user.id })
@@ -54,14 +54,10 @@ test('show all notes', async ({ page, loginUser, saveNote }) => {
 
   await page.getByRole('link', { name: savedNoteOne.title ?? '' }).click()
 
-  const noteDisplay = page.getByTestId('note-display')
-
-  await expect(
-    noteDisplay.getByRole('heading', { name: savedNoteOne.title ?? '' }),
-  ).toBeVisible()
+  await expect(notePage.title).toHaveText(savedNoteOne.title ?? '')
 })
 
-test('delete a note', async ({ page, loginUser, saveNote, notePage }) => {
+test('delete a note', async ({ loginUser, saveNote, notePage }) => {
   const user = await loginUser()
   const savedNote = await saveNote({ authorId: user.id })
 
