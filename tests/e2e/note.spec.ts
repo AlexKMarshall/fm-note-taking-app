@@ -1,24 +1,22 @@
 import { expect, test } from '../playwright-utilities'
 
-test('shows a note', async ({ page, loginUser, saveNote }) => {
+test('shows a note', async ({ page, loginUser, saveNote, notePage }) => {
   const user = await loginUser()
 
   const savedNote = await saveNote({ authorId: user.id })
 
-  await page.goto(`/notes/${savedNote.id}`)
+  await notePage.goto(savedNote.id)
 
-  const noteDisplay = page.getByTestId('note-display')
+  await expect(notePage.title).toHaveText(savedNote.title ?? '')
 
-  await expect(
-    noteDisplay.getByRole('heading', { name: savedNote.title ?? '' }),
-  ).toBeVisible()
-  await expect(noteDisplay.getByText(savedNote.content ?? '')).toBeVisible()
+  await expect(notePage.content).toHaveText(savedNote.content ?? '')
+
   for (const tag of savedNote.tags) {
-    await expect(noteDisplay.getByText(tag)).toBeVisible()
+    await expect(notePage.tags).toContainText(tag)
   }
 })
 
-test('create a note', async ({ page, loginUser, makeNote }) => {
+test('create a note', async ({ page, loginUser, makeNote, notePage }) => {
   await loginUser()
 
   const note = makeNote()
@@ -31,14 +29,12 @@ test('create a note', async ({ page, loginUser, makeNote }) => {
 
   await page.getByRole('button', { name: 'Save' }).click()
 
-  const noteDisplay = page.getByTestId('note-display')
+  await expect(notePage.title).toHaveText(note.title ?? '')
 
-  await expect(
-    noteDisplay.getByRole('heading', { name: note.title ?? '' }),
-  ).toBeVisible()
-  await expect(noteDisplay.getByText(note.content ?? '')).toBeVisible()
+  await expect(notePage.content).toHaveText(note.content ?? '')
+
   for (const tag of note.tags) {
-    await expect(noteDisplay.getByText(tag)).toBeVisible()
+    await expect(notePage.tags).toContainText(tag)
   }
 })
 
@@ -63,4 +59,15 @@ test('show all notes', async ({ page, loginUser, saveNote }) => {
   await expect(
     noteDisplay.getByRole('heading', { name: savedNoteOne.title ?? '' }),
   ).toBeVisible()
+})
+
+test('delete a note', async ({ page, loginUser, saveNote, notePage }) => {
+  const user = await loginUser()
+  const savedNote = await saveNote({ authorId: user.id })
+
+  await notePage.goto(savedNote.id)
+
+  await notePage.deleteNote()
+
+  await expect(notePage.note).toBeHidden()
 })

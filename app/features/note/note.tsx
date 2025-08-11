@@ -49,7 +49,9 @@ export function Note({
             <Icon name="icon-tag" className="size-4" />
             Tags
           </div>
-          <div className="py-1">{tags.join(', ')}</div>
+          <div className="py-1" data-testid="tags">
+            {tags.join(', ')}
+          </div>
           <div className="flex gap-2 py-1">
             <Icon name="icon-clock" className="size-4" />
             Last edited
@@ -57,7 +59,10 @@ export function Note({
           <div className="py-1">{lastEdited}</div>
         </div>
         <Separator orientation="horizontal" />
-        <div className="text-sm whitespace-pre-line text-gray-800">
+        <div
+          className="text-sm whitespace-pre-line text-gray-800"
+          data-testid="content"
+        >
           {content}
         </div>
       </Stack>
