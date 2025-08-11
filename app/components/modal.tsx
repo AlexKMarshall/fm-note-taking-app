@@ -22,7 +22,7 @@ type ModalContext = {
 
 const ModalContext = createContext<ModalContext | null>(null)
 
-function useModal() {
+export function useModal() {
   const context = use(ModalContext)
   if (!context) {
     throw new Error('useModal must be used within a ModalRoot')

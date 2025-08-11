@@ -1,6 +1,6 @@
 import { DeleteNoteModal } from './delete-note-modal'
-import { Cluster } from '~/components/cluster'
 import { Button } from '~/components/button'
+import { Cluster } from '~/components/cluster'
 import { Icon } from '~/components/icon'
 import { IconButton } from '~/components/icon-button'
 import { Separator } from '~/components/separator'

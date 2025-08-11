@@ -53,7 +53,7 @@ export const notesToTags = sqliteTable(
   'notesToTags',
   {
     noteId: integer()
-      .references(() => notes.id)
+      .references(() => notes.id, { onDelete: 'cascade' })
       .notNull(),
     tagId: integer()
       .references(() => tags.id, { onDelete: 'cascade' })
