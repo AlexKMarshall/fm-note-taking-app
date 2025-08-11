@@ -15,7 +15,7 @@ importers:
         specifier: 1.8.2
         version: 1.8.2(valibot@1.1.0(typescript@5.9.2))
       clsx:
-        specifier: ^2.1.1
+        specifier: 2.1.1
         version: 2.1.1
       drizzle-orm:
         specifier: 0.44.4
