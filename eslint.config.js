@@ -84,6 +84,7 @@ export default [
       'workers/**',
       '*.config.js',
       '*.config.ts',
+      'worker-configuration.d.ts',
     ],
   },
 ]

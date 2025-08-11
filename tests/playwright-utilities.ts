@@ -3,14 +3,14 @@ import { faker } from '@faker-js/faker'
 import { expect, test as testBase } from '@playwright/test'
 import setCookieParser from 'set-cookie-parser'
 import { type PlatformProxy, getPlatformProxy } from 'wrangler'
-import { NoteRepository, NoteService } from '~/features/note/note-service'
-import { UserRepository, UserService } from '~/features/user/user-service'
 import { createSessionCookie } from '../app/session.server'
 import { type Database, getDatabase } from '../database'
 import { LoginPageObjectModel } from './object-models/login-page'
 import { NotePageObjectModel } from './object-models/note-page'
 import { SignupPageObjectModel } from './object-models/signup-page'
 import { validatedTestEnvironment } from './test-environment'
+import { UserRepository, UserService } from '~/features/user/user-service'
+import { NoteRepository, NoteService } from '~/features/note/note-service'
 
 type TestFixtures = {
   /**
