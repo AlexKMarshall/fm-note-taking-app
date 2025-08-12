@@ -136,22 +136,6 @@ import { Stack } from '~/components/stack'
 import { type User } from './types'
 ```
 
-## Styling
-
-### Tailwind CSS
-
-- Use Tailwind CSS for styling
-- Prefer utility classes over custom CSS
-- Where possible encapsulate re-usable styles in components. Allow for pragmatic overrides using tailwind classnames to achieve responsive variants, or to inject styles from a parent, such as margin, grid positioning etc
-- One off styling for pages and bespoke items can be done with bare tailwind, not every single element needs to be its own component
-
-### CSS Classes
-
-- Use consistent spacing and sizing, avoid arbitrary values unless completely necessary, and comment the reasoning behind the value
-- Prefer semantic color names (gray-500, blue-600)
-- Use focus-visible for keyboard navigation
-- Include proper hover and focus states
-
 ## Form Handling
 
 ### Validation
