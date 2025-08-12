@@ -17,6 +17,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
     <div>
       <h1>Welcome to the Home Page</h1>
       <p>You are logged in as user ID: {userId}</p>
+      <p>This page should redirect away to the notes page</p>
     </div>
   )
 }
