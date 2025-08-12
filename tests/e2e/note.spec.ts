@@ -59,9 +59,9 @@ test('show all notes', async ({ page, loginUser, saveNote, notePage }) => {
 
 test('archive a note', async ({ loginUser, saveNote, notePage, page }) => {
   const user = await loginUser()
-  const savedNote = await saveNote({ authorId: user.id })
+  const noteToArchive = await saveNote({ authorId: user.id })
 
-  await notePage.goto(savedNote.id)
+  await notePage.goto(noteToArchive.id)
 
   await notePage.archiveNote()
 
@@ -69,8 +69,12 @@ test('archive a note', async ({ loginUser, saveNote, notePage, page }) => {
 
   await page.goto('/notes')
   await expect(
-    page.getByRole('link', { name: savedNote.title ?? '' }),
+    page.getByRole('link', { name: noteToArchive.title ?? '' }),
   ).toBeHidden()
+  await page.goto('/archived')
+  await expect(
+    page.getByRole('link', { name: noteToArchive.title ?? '' }),
+  ).toBeVisible()
 })
 
 test('delete a note', async ({ loginUser, saveNote, notePage }) => {

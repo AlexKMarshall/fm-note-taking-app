@@ -20,5 +20,8 @@ export default [
         route(':id', './notes/note.tsx'),
       ]),
     ]),
+    layout('routes/archived/layout.tsx', [
+      ...prefix('archived', [index('routes/archived/home.tsx')]),
+    ]),
   ]),
 ] satisfies RouteConfig
