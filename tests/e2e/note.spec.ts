@@ -57,6 +57,22 @@ test('show all notes', async ({ page, loginUser, saveNote, notePage }) => {
   await expect(notePage.title).toHaveText(savedNoteOne.title ?? '')
 })
 
+test('archive a note', async ({ loginUser, saveNote, notePage, page }) => {
+  const user = await loginUser()
+  const savedNote = await saveNote({ authorId: user.id })
+
+  await notePage.goto(savedNote.id)
+
+  await notePage.archiveNote()
+
+  await expect(notePage.note).toBeHidden()
+
+  await page.goto('/notes')
+  await expect(
+    page.getByRole('link', { name: savedNote.title ?? '' }),
+  ).toBeHidden()
+})
+
 test('delete a note', async ({ loginUser, saveNote, notePage }) => {
   const user = await loginUser()
   const savedNote = await saveNote({ authorId: user.id })

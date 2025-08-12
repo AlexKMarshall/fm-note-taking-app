@@ -53,7 +53,7 @@ export async function loader({ context, request, params }: Route.LoaderArgs) {
 }
 
 const NoteActionSchema = v.object({
-  intent: v.literal('delete'),
+  intent: v.union([v.literal('delete'), v.literal('archive')]),
 })
 
 export async function action({ context, request, params }: Route.ActionArgs) {
@@ -70,10 +70,21 @@ export async function action({ context, request, params }: Route.ActionArgs) {
   }
 
   const noteService = new NoteService(new NoteRepository(context.db))
-  // TODO: We'll have archiving action soon so setting up the conditional now
   if (submission.value.intent === 'delete') {
     try {
       await noteService.deleteNote({ noteId, authorId: userId })
+      return redirect('/notes')
+    } catch (error) {
+      console.error(error)
+      return submission.reply({
+        formErrors: ['Something went wrong pleas try again later'],
+      })
+    }
+  }
+
+  if (submission.value.intent === 'archive') {
+    try {
+      await noteService.archiveNote({ noteId, authorId: userId })
       return redirect('/notes')
     } catch (error) {
       console.error(error)
