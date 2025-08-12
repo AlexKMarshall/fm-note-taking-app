@@ -26,6 +26,16 @@ export class NotePageObjectModel {
     return this.note.getByTestId('tags')
   }
 
+  async archiveNote() {
+    await this.page.getByRole('button', { name: 'Archive note' }).click()
+    const confirmationModal = this.page.getByRole('dialog', {
+      name: 'Archive note',
+    })
+    await confirmationModal
+      .getByRole('button', { name: /archive note/i })
+      .click()
+  }
+
   async deleteNote() {
     await this.page.getByRole('button', { name: 'Delete note' }).click()
     const confirmationModal = this.page.getByRole('dialog', {

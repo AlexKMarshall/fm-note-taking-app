@@ -19,11 +19,14 @@ type Note = {
   tags: string[]
   content: string | null
   updatedAt: string
+  isArchived: boolean
 }
 
 export interface INoteService {
   createNote(createNoteDto: CreateNoteDto): Promise<Note>
   getNotesByAuthor(getNotesDto: { authorId: number }): Promise<Note[]>
+  getArchivedNotesByAuthor(getNotesDto: { authorId: number }): Promise<Note[]>
+  archiveNote(archiveDto: { noteId: number; authorId: number }): Promise<void>
   deleteNote(deleteDto: { noteId: number; authorId: number }): Promise<void>
 }
 
@@ -33,8 +36,14 @@ export class NoteService implements INoteService {
   async createNote(createNoteDto: CreateNoteDto) {
     return this.noteRepository.create(createNoteDto)
   }
-  async getNotesByAuthor(getNotesDto: { authorId: number }) {
-    return this.noteRepository.getNotesByAuthor(getNotesDto)
+  async getNotesByAuthor({ authorId }: { authorId: number }) {
+    return this.noteRepository.getNotesByAuthor({ authorId, isArchived: false })
+  }
+  async getArchivedNotesByAuthor({ authorId }: { authorId: number }) {
+    return this.noteRepository.getNotesByAuthor({ authorId, isArchived: true })
+  }
+  async archiveNote(archiveDto: { noteId: number; authorId: number }) {
+    return this.noteRepository.archiveNote(archiveDto)
   }
   async deleteNote(deleteDto: { noteId: number; authorId: number }) {
     return this.noteRepository.deleteNote(deleteDto)
@@ -44,7 +53,11 @@ export class NoteService implements INoteService {
 export interface INoteRepository {
   create(createNoteDto: CreateNoteDto): Promise<Note>
   get(getDto: { noteId: number; authorId: number }): Promise<Note | null>
-  getNotesByAuthor(getNotesDto: { authorId: number }): Promise<Note[]>
+  getNotesByAuthor(getNotesDto: {
+    authorId: number
+    isArchived: boolean
+  }): Promise<Note[]>
+  archiveNote(archiveDto: { noteId: number; authorId: number }): Promise<void>
   deleteNote(deleteDto: { noteId: number; authorId: number }): Promise<void>
 }
 
@@ -59,6 +72,7 @@ export class NoteRepository implements INoteRepository {
         title: true,
         content: true,
         updatedAt: true,
+        isArchived: true,
       },
       with: {
         notesToTags: {
@@ -81,14 +95,24 @@ export class NoteRepository implements INoteRepository {
     return { ...restNote, tags: notesToTags.map((t) => t.tag.name) }
   }
 
-  async getNotesByAuthor({ authorId }: { authorId: number }) {
+  async getNotesByAuthor({
+    authorId,
+    isArchived,
+  }: {
+    authorId: number
+    isArchived: boolean
+  }) {
     const notes = await this.db.query.notes.findMany({
-      where: eq(notesTable.authorId, authorId),
+      where: and(
+        eq(notesTable.authorId, authorId),
+        eq(notesTable.isArchived, isArchived),
+      ),
       columns: {
         id: true,
         title: true,
         content: true,
         updatedAt: true,
+        isArchived: true,
       },
       with: {
         notesToTags: {
@@ -148,6 +172,19 @@ export class NoteRepository implements INoteRepository {
       throw new Error('Failed to create note')
     }
     return noteToReturn
+  }
+
+  async archiveNote({
+    noteId,
+    authorId,
+  }: {
+    noteId: number
+    authorId: number
+  }) {
+    await this.db
+      .update(notesTable)
+      .set({ isArchived: true })
+      .where(and(eq(notesTable.id, noteId), eq(notesTable.authorId, authorId)))
   }
 
   async deleteNote({ noteId, authorId }: { noteId: number; authorId: number }) {

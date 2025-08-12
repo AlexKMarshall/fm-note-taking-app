@@ -1,4 +1,5 @@
 import { DeleteNoteModal } from './delete-note-modal'
+import { ArchiveNoteModal } from './archive-note-modal'
 import { Button } from '~/components/button'
 import { Cluster } from '~/components/cluster'
 import { Icon } from '~/components/icon'
@@ -40,6 +41,15 @@ export function Note({
                 />
               )}
             />
+            <ArchiveNoteModal
+              trigger={({ show }) => (
+                <IconButton
+                  icon="icon-archive"
+                  label="Archive note"
+                  onClick={show}
+                />
+              )}
+            />
           </Cluster>
         </div>
         <Separator orientation="horizontal" className="lg:hidden" />
@@ -70,6 +80,14 @@ export function Note({
         gap="gap-3"
         className="border-l border-gray-200 py-5 pr-8 pl-4 max-lg:hidden"
       >
+        <ArchiveNoteModal
+          trigger={({ show }) => (
+            <Button variant="border" onClick={show}>
+              <Icon name="icon-archive" className="size-5" />
+              Archive note
+            </Button>
+          )}
+        />
         <DeleteNoteModal
           trigger={({ show }) => (
             <Button variant="border" onClick={show}>

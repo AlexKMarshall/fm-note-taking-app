@@ -1,0 +1,1 @@
+ALTER TABLE `notes` ADD `isArchived` integer DEFAULT false;

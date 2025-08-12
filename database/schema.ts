@@ -21,6 +21,7 @@ export const notes = sqliteTable('notes', {
   id: integer().primaryKey({ autoIncrement: true }),
   title: text(),
   content: text(),
+  isArchived: integer({ mode: 'boolean' }).default(false).notNull(),
   authorId: integer()
     .references(() => users.id)
     .notNull(),
