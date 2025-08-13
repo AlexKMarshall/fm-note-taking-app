@@ -9,11 +9,11 @@ export function MobileFooter() {
     >
       <FooterLink to="/notes" label="Home" icon="icon-home" />
       <Separator orientation="vertical" className="max-sm:hidden" />
-      <FooterLink to="/notes/search" label="Search" icon="icon-search" />
+      <FooterLink to="/search" label="Search" icon="icon-search" />
       <Separator orientation="vertical" className="max-sm:hidden" />
-      <FooterLink to="/notes/archived" label="Archived" icon="icon-archive" />
+      <FooterLink to="/archived" label="Archived" icon="icon-archive" />
       <Separator orientation="vertical" className="max-sm:hidden" />
-      <FooterLink to="/notes/tags" label="Tags" icon="icon-tag" />
+      <FooterLink to="/tags" label="Tags" icon="icon-tag" />
       <Separator orientation="vertical" className="max-sm:hidden" />
       <FooterLink to="/settings" label="Settings" icon="icon-settings" />
     </footer>
