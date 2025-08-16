@@ -48,7 +48,7 @@
     "@storybook/addon-vitest": "9.1.2",
     "@storybook/react-vite": "9.1.2",
     "@tailwindcss/vite": "4.1.12",
-    "@types/node": "22.17.1",
+    "@types/node": "22.17.2",
     "@types/react": "19.1.10",
     "@types/react-dom": "19.1.7",
     "@types/set-cookie-parser": "2.4.10",
