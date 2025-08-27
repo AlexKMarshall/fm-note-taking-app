@@ -50,7 +50,7 @@
     "@tailwindcss/vite": "4.1.12",
     "@types/node": "22.17.2",
     "@types/react": "19.1.11",
-    "@types/react-dom": "19.1.7",
+    "@types/react-dom": "19.1.8",
     "@types/set-cookie-parser": "2.4.10",
     "@typescript-eslint/eslint-plugin": "8.40.0",
     "@typescript-eslint/parser": "8.40.0",
