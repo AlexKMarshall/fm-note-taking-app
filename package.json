@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "@chromatic-com/storybook": "4.1.1",
-    "@cloudflare/vite-plugin": "1.13.4",
+    "@cloudflare/vite-plugin": "1.13.5",
     "@faker-js/faker": "10.0.0",
     "@playwright/test": "1.55.1",
     "@react-router/dev": "7.9.1",
