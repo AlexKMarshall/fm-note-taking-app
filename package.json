@@ -60,7 +60,7 @@
     "chromatic": "13.3.0",
     "dotenv-cli": "10.0.0",
     "drizzle-kit": "0.31.5",
-    "eslint": "9.36.0",
+    "eslint": "9.37.0",
     "eslint-plugin-import": "2.32.0",
     "eslint-plugin-react": "7.37.5",
     "eslint-plugin-react-hooks": "5.2.0",
