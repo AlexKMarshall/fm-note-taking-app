@@ -42,7 +42,7 @@
     "@cloudflare/vite-plugin": "1.13.11",
     "@faker-js/faker": "10.0.0",
     "@playwright/test": "1.56.0",
-    "@react-router/dev": "7.9.3",
+    "@react-router/dev": "7.9.4",
     "@storybook/addon-a11y": "9.1.10",
     "@storybook/addon-docs": "9.1.10",
     "@storybook/addon-vitest": "9.1.10",
