@@ -75,7 +75,7 @@
     "storybook-addon-remix-react-router": "5.0.0",
     "tailwindcss": "4.1.14",
     "tsx": "4.20.6",
-    "type-fest": "5.0.1",
+    "type-fest": "5.1.0",
     "typescript": "5.9.3",
     "vite": "7.1.9",
     "vite-tsconfig-paths": "5.1.4",
