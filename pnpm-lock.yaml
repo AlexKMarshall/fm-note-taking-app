@@ -12,8 +12,8 @@ importers:
         specifier: 1.8.2
         version: 1.8.2(react@19.2.0)
       '@conform-to/valibot':
-        specifier: 1.8.2
-        version: 1.8.2(valibot@1.1.0(typescript@5.9.3))
+        specifier: 1.15.0
+        version: 1.15.0(valibot@1.1.0(typescript@5.9.3))
       clsx:
         specifier: 2.1.1
         version: 2.1.1
@@ -424,6 +424,9 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@conform-to/dom@1.15.0':
+    resolution: {integrity: sha512-v7sUaObBAgEnWi1AyMJBtfr8FAJ7cjhF9/t0QD0BUhN8JCd7KbZdv/r8TEdvODjEMXpuk2gX2QHV9qniZZLVTw==}
+
   '@conform-to/dom@1.8.2':
     resolution: {integrity: sha512-5eDqI9366+23Fl/E5zxebuy2FCebJKpSrdE/c6PZQ5Ul59BYQ17pBmkLkvxAKjPXW+Qq77BJyjGjuklwmqN08A==}
 
@@ -432,8 +435,8 @@ packages:
     peerDependencies:
       react: '>=18'
 
-  '@conform-to/valibot@1.8.2':
-    resolution: {integrity: sha512-IhR4scpou0CUL3Q5HedrepGn8oLCNbuhO53569ZCBFDL2lXorSv+k8JPKZ03JPYsjdQC79EkTDd24NA+jZiSrA==}
+  '@conform-to/valibot@1.15.0':
+    resolution: {integrity: sha512-pXPzaG0WAGCE+5II8mH/xmfs2sHsyJASZ4isHKEwHzwUWRMA/pGP4JBrhNXn6HEq4TtJwXPNrBNJhSKhZv9Z+w==}
     peerDependencies:
       valibot: '>= 0.32.0'
 
@@ -4204,6 +4207,8 @@ snapshots:
   '@cloudflare/workerd-windows-64@1.20251011.0':
     optional: true
 
+  '@conform-to/dom@1.15.0': {}
+
   '@conform-to/dom@1.8.2': {}
 
   '@conform-to/react@1.8.2(react@19.2.0)':
@@ -4211,9 +4216,9 @@ snapshots:
       '@conform-to/dom': 1.8.2
       react: 19.2.0
 
-  '@conform-to/valibot@1.8.2(valibot@1.1.0(typescript@5.9.3))':
+  '@conform-to/valibot@1.15.0(valibot@1.1.0(typescript@5.9.3))':
     dependencies:
-      '@conform-to/dom': 1.8.2
+      '@conform-to/dom': 1.15.0
       valibot: 1.1.0(typescript@5.9.3)
 
   '@cspotcode/source-map-support@0.8.1':
