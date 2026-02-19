@@ -25,7 +25,7 @@
     "build:icons": "tsx ./build-icons.ts"
   },
   "dependencies": {
-    "@conform-to/react": "1.8.2",
+    "@conform-to/react": "1.17.1",
     "@conform-to/valibot": "1.8.2",
     "clsx": "2.1.1",
     "drizzle-orm": "0.44.4",
